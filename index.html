@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio developer & creative technologist profesional yang disajikan sebagai dunia digital interaktif bertema Hatsune Miku dengan low-poly 3D aesthetics, modern UI, dan eksplorasi dinamis.">
+    <meta name="keywords" content="Portfolio Developer, Fullstack Engineer, Creative Developer, Hatsune Miku, Three.js, Web Audio, Interactive Portfolio, WebGL, Low Poly">
+    <meta name="author" content="Hatsune Developer">
+    <meta name="theme-color" content="#071116">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Developer Portfolio — Interactive 3D Digital World">
+    <meta property="og:description" content="A modern professional CV portfolio presented as a small interactive Hatsune Miku-inspired digital world.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/miku_chibi_pixel.png">
+
+    <title>Hatsune Developer — Modern Portfolio & 3D Digital World</title>
+
+    <link rel="icon" type="image/png" href="assets/miku_chibi_pixel.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Background Atmospheric Matrix Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Decorative Cyber Corner Frame -->
+    <div class="cyber-fixed-frame" aria-hidden="true">
+        <div class="frame-corner frame-top-left"></div>
+        <div class="frame-corner frame-top-right"></div>
+        <div class="frame-corner frame-bottom-left"></div>
+        <div class="frame-corner frame-bottom-right"></div>
+    </div>
+
+    <!-- HUD Header & Navigation Bar -->
+    <header class="hud-header">
+        <div class="hud-container">
+            <!-- Brand / Logo -->
+            <a href="#hero" class="hud-brand" id="brand-logo" aria-label="Beranda Portfolio">
+                <div class="brand-icon">01</div>
+                <div class="brand-text">
+                    <span class="brand-title">MIKU / DEV</span>
+                    <span class="brand-tag">PORTFOLIO</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hud-nav" id="main-nav-links" aria-label="Navigasi Utama">
+                <a href="#hero" class="nav-link">HOME</a>
+                <a href="#world" class="nav-link">3D WORLD</a>
+                <a href="#about" class="nav-link">ABOUT</a>
+                <a href="#skills" class="nav-link">SKILLS</a>
+                <a href="#projects" class="nav-link">PROJECTS</a>
+                <a href="#experience" class="nav-link">EXPERIENCE</a>
+                <a href="#github" class="nav-link">GITHUB</a>
+                <a href="#contact" class="nav-link">CONTACT</a>
+            </nav>
+
+            <!-- HUD Control Actions -->
+            <div class="hud-actions">
+                <!-- Mode Switcher (Explore 3D vs Normal CV) -->
+                <button class="mode-toggle-btn" id="mode-toggle-btn" title="Ganti Mode Navigasi" aria-label="Toggle Mode Navigasi">
+                    <span id="mode-toggle-icon">✦</span>
+                    <span id="mode-toggle-label">MODE: 3D WORLD</span>
+                </button>
+
+                <!-- Audio Toggle (BGM) -->
+                <button class="hud-btn" id="audio-toggle-btn" title="Toggle Musik Latar" aria-label="Toggle Background Music">
+                    <span>♫</span> MUSIC: OFF
+                </button>
+
+                <!-- SFX Toggle -->
+                <button class="hud-btn" id="sfx-toggle-btn" title="Toggle Sound FX" aria-label="Toggle Sound Effects">
+                    <span>⚡</span> SFX: ON
+                </button>
+
+                <!-- Terminal Console Trigger -->
+                <button class="hud-btn" id="open-terminal-btn" title="Buka Cyber Terminal CLI (~)" aria-label="Open CLI Terminal">
+                    <span>&gt;_</span> CLI
+                </button>
+
+                <!-- System Clock -->
+                <span class="hud-btn" id="hud-system-clock" title="System Time" aria-hidden="true">00:00:00</span>
+
+                <!-- Mobile Menu Hamburger -->
+                <button class="mobile-menu-btn" id="mobile-menu-toggle" aria-label="Buka Menu Mobile">
+                    ☰
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+
+        <!-- ==========================================================================
+             01. HERO SECTION
+             ========================================================================== -->
+        <section id="hero" class="hero-section">
+            <div class="hero-grid">
+                <!-- Left: Hero Text & Information -->
+                <div class="hero-content">
+                    <div class="hero-telemetry-badge">
+                        <span class="telemetry-pulse"></span>
+                        <span class="telemetry-text">OPEN FOR OPPORTUNITIES · CREATIVE DEVELOPER</span>
+                    </div>
+
+                    <h1 class="hero-title">
+                        HELLO, I'M<br>
+                        <span id="hero-name" class="text-cyan">YOUR NAME</span>
+                    </h1>
+
+                    <div id="hero-role" class="hero-role">FULLSTACK DEVELOPER &amp; CREATIVE TECHNOLOGIST</div>
+
+                    <p id="hero-bio" class="hero-bio">
+                        Building things, exploring ideas, and turning imagination into something real. Menggabungkan kode berkinerja tinggi dengan antarmuka digital yang memukau.
+                    </p>
+
+                    <!-- CTAs for Both Exploration and Standard CV -->
+                    <div class="hero-cta-group">
+                        <a href="#world" class="cyber-btn primary" id="btn-hero-explore">
+                            <span>✦</span> START JOURNEY (3D WORLD)
+                        </a>
+                        <a href="#about" class="cyber-btn secondary" id="btn-hero-cv">
+                            <span>↘</span> VIEW FULL CV
+                        </a>
+                        <a href="#contact" class="cyber-btn secondary">
+                            <span>✉</span> HUBUNGI SAYA
+                        </a>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="hero-stats-row" id="hero-stats-row">
+                        <!-- Populated dynamically by main.js -->
+                    </div>
+                </div>
+
+                <!-- Right: 3D Hologram Chibi Miku Card -->
+                <div class="hero-hologram-wrapper">
+                    <div class="hero-holo-card" id="hero-avatar-card">
+                        <div class="card-top-bar">
+                            <span>GUIDE AVATAR // CHIBI MIKU 01</span>
+                            <span class="freq-code">393.9 MHz</span>
+                        </div>
+
+                        <div class="holo-image-frame">
+                            <img src="assets/miku_chibi_pixel.png" alt="Chibi Hatsune Miku 3D Voxel Pixelated Guide" class="miku-avatar-img">
+                            <div class="holo-scanlines"></div>
+                        </div>
+
+                        <div class="holo-meta-bar">
+                            <span class="status-badge">AVATAR: ONLINE</span>
+                            <span style="color: var(--text-secondary);">VOCALOID UNIT 01</span>
+                            <span style="color: var(--miku-primary); font-weight: 600;">ACTIVE GUIDE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             02. INTERACTIVE 3D DIGITAL WORLD
+             ========================================================================== -->
+        <section id="world" class="section-wrapper world-section">
+            <div class="section-header">
+                <span class="section-code">INTERACTIVE EXPLORATION</span>
+                <h2 class="section-title">A SMALL <span class="glow">DIGITAL WORLD</span></h2>
+                <p class="section-subtitle">
+                    Jelajahi pulau digital kecil ini bersama <strong>Chibi Miku</strong> menggunakan tombol <strong>WASD</strong>, <strong>Tombol Panah</strong>, atau klik tanah untuk berjalan. Dekati checkpoint untuk membuka informasi terkait.
+                </p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="world-container">
+                <!-- Three.js Stage Container -->
+                <div id="world-canvas-container" role="region" aria-label="3D Interactive Digital World Canvas"></div>
+
+                <!-- HUD Top: Quick Checkpoint Jump Pills -->
+                <div class="world-hud-top">
+                    <div class="world-checkpoints-pills" aria-label="Checkpoint Navigasi Cepat">
+                        <button class="world-checkpoint-nav-btn active" data-checkpoint="start">START</button>
+                        <button class="world-checkpoint-nav-btn" data-checkpoint="about">PROFILE</button>
+                        <button class="world-checkpoint-nav-btn" data-checkpoint="skills">SKILLS</button>
+                        <button class="world-checkpoint-nav-btn" data-checkpoint="projects">PROJECTS</button>
+                        <button class="world-checkpoint-nav-btn" data-checkpoint="experience">EXPERIENCE</button>
+                        <button class="world-checkpoint-nav-btn" data-checkpoint="github">GITHUB</button>
+                        <button class="world-checkpoint-nav-btn" data-checkpoint="contact">CONTACT</button>
+                    </div>
+                </div>
+
+                <!-- Floating Interaction Prompt (Visible when near a checkpoint) -->
+                <div id="world-interaction-prompt" class="world-interaction-prompt" role="alert" aria-live="polite">
+                    <div class="prompt-text-group">
+                        <span id="world-prompt-title" class="prompt-title">CHECKPOINT // NAME</span>
+                        <span id="world-prompt-subtitle" class="prompt-subtitle">Dekati untuk melihat rincian</span>
+                    </div>
+                    <button id="world-open-btn" class="world-open-btn">BUKA [E]</button>
+                </div>
+
+                <!-- HUD Bottom: Status & Mobile D-Pad -->
+                <div class="world-hud-bottom">
+                    <div id="world-status-indicator" class="world-status-indicator">
+                        Guide Miku with WASD / Arrow Keys / Click on ground
+                    </div>
+
+                    <!-- On-Screen Virtual D-Pad for Mobile Touch -->
+                    <div class="world-dpad-container" aria-label="Kontrol Layar Sentuh Mobile">
+                        <div class="world-dpad-row">
+                            <button class="world-dpad-btn" data-dir="up" aria-label="Gerak ke Atas">↑</button>
+                        </div>
+                        <div class="world-dpad-row">
+                            <button class="world-dpad-btn" data-dir="left" aria-label="Gerak ke Kiri">←</button>
+                            <button class="world-dpad-btn" data-dir="down" aria-label="Gerak ke Bawah">↓</button>
+                            <button class="world-dpad-btn" data-dir="right" aria-label="Gerak ke Kanan">→</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             03. ABOUT SECTION (PROFILE)
+             ========================================================================== -->
+        <section id="about" class="section-wrapper">
+            <div class="section-header">
+                <span class="section-code">// PROFILE &amp; PHILOSOPHY</span>
+                <h2 class="section-title">ABOUT <span class="glow">ME</span></h2>
+                <p class="section-subtitle">Profil profesional, fokus keahlian, dan dedikasi dalam membangun produk digital modern.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="about-card">
+                <div class="about-avatar-wrap">
+                    <img src="assets/miku_chibi_pixel.png" alt="Avatar Profil Hatsune Miku 3D Voxel" class="about-avatar-img">
+                </div>
+                <div class="about-info-wrap">
+                    <span class="about-tag">DIGITAL ARCHITECT // IDENTITY</span>
+                    <h3 id="about-name" class="about-name">YOUR NAME</h3>
+                    <div id="about-title" class="about-title">Fullstack Developer &amp; Creative Technologist</div>
+                    <p id="about-bio" class="about-bio">
+                        Saya senang mengubah ide dan konsep menjadi produk digital yang intuitif, estetis, dan berkinerja tinggi. Dengan pengalaman lintas platform mulai dari web apps modern hingga eksplorasi interaktif 3D dan Web Audio, setiap detail dirancang dengan cermat dan berorientasi pada kepuasan pengguna.
+                    </p>
+                    <div class="about-meta-row">
+                        <div class="meta-item">
+                            <span class="icon">📍</span>
+                            <span id="about-location">Jakarta / Remote Worldwide</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="icon">✦</span>
+                            <span id="about-status">Open for Opportunities &amp; Collaborations</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 14px;">
+                        <a href="#contact" class="cyber-btn primary">
+                            <span>✉</span> AJUKAN KERJA SAMA
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             04. SKILLS SECTION (CAPABILITIES)
+             ========================================================================== -->
+        <section id="skills" class="section-wrapper">
+            <div class="section-header">
+                <span class="section-code">// TECHNICAL STACK</span>
+                <h2 class="section-title">SKILLS &amp; <span class="glow">CAPABILITIES</span></h2>
+                <p class="section-subtitle">Penguasaan teknologi modern, arsitektur kode, framework frontend/backend, dan creative tools.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="skills-grid" id="skills-grid-container">
+                <!-- Dynamically populated from js/data.js -->
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             05. PROJECTS SECTION
+             ========================================================================== -->
+        <section id="projects" class="section-wrapper">
+            <div class="section-header">
+                <span class="section-code">// FEATURED WORK</span>
+                <h2 class="section-title">MY <span class="glow">PROJECTS</span></h2>
+                <p class="section-subtitle">Pilihan proyek unggulan mencakup Web Audio, 3D WebGL, dan aplikasi fullstack responsif.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="project-filter-bar" id="project-filter-buttons">
+                <button class="filter-btn active" data-filter="all">SEMUA PROYEK</button>
+                <button class="filter-btn" data-filter="audio">AUDIO &amp; SYNTH</button>
+                <button class="filter-btn" data-filter="3d">3D &amp; WEBGL</button>
+                <button class="filter-btn" data-filter="fullstack">FULLSTACK</button>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="projects-grid" id="projects-grid">
+                <!-- Dynamically populated from js/data.js -->
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             06. EXPERIENCE & EDUCATION TIMELINE
+             ========================================================================== -->
+        <section id="experience" class="section-wrapper">
+            <div class="section-header">
+                <span class="section-code">// CAREER &amp; ACADEMICS</span>
+                <h2 class="section-title">EXPERIENCE &amp; <span class="glow">EDUCATION</span></h2>
+                <p class="section-subtitle">Rekam jejak kontribusi profesional dan latar belakang pendidikan formal.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="timeline-section-grid">
+                <!-- Experience Column -->
+                <div class="timeline-column">
+                    <h3><span>💼</span> PENGALAMAN KERJA</h3>
+                    <div class="timeline-track" id="experience-timeline">
+                        <!-- Populated dynamically by main.js -->
+                    </div>
+                </div>
+
+                <!-- Education Column -->
+                <div class="timeline-column">
+                    <h3><span>🎓</span> PENDIDIKAN</h3>
+                    <div class="timeline-track" id="education-timeline">
+                        <!-- Populated dynamically by main.js -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             07. GITHUB REPOSITORIES INTEGRATION
+             ========================================================================== -->
+        <section id="github" class="section-wrapper">
+            <div class="section-header">
+                <span class="section-code">// OPEN SOURCE &amp; CODE</span>
+                <h2 class="section-title">GITHUB <span class="glow">HIGHLIGHTS</span></h2>
+                <p class="section-subtitle">
+                    Repositori publik dan kontribusi open source langsung dari <a id="github-user-link" href="https://github.com" target="_blank" rel="noopener noreferrer" style="color: var(--miku-primary); text-decoration: none;">GitHub</a>.
+                </p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="github-repos-grid" id="github-repos-grid">
+                <!-- Populated dynamically by main.js with API data & fallback -->
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             08. OPTIONAL ARCADE & LAB (Preserved Feature)
+             ========================================================================== -->
+        <section id="arcade" class="section-wrapper">
+            <div class="section-header">
+                <span class="section-code">// RECREATIONAL PROTOCOL // VOCALOID ARCADE</span>
+                <h2 class="section-title">DIVA BEAT <span class="glow">ARCADE</span></h2>
+                <p class="section-subtitle">
+                    Mini-game ritme interaktif berbasis Web Audio API. Tekan tombol [D], [F], [J], [K] atau tap pada layar sesuai beat.
+                </p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="game-arcade-cabinet" id="diva-game-container">
+                <div class="cabinet-header">
+                    <span>PROJECT DIVA // CYBER-RHYTHM 39</span>
+                    <span style="color: var(--miku-pink-accent);">TEMPO: 135 BPM</span>
+                </div>
+
+                <div class="cabinet-scoreboard">
+                    <div class="score-cell">
+                        <div class="lbl">SCORE</div>
+                        <div class="val" id="game-score">0</div>
+                    </div>
+                    <div class="score-cell">
+                        <div class="lbl">COMBO</div>
+                        <div class="val" id="game-combo">0x</div>
+                    </div>
+                    <div class="score-cell">
+                        <div class="lbl">HIGH SCORE</div>
+                        <div class="val" id="game-highscore">0</div>
+                    </div>
+                    <div class="score-cell">
+                        <div class="lbl">DIFFICULTY</div>
+                        <div class="val" style="color: var(--miku-primary); font-size: 0.95rem;">NORMAL ★★★</div>
+                    </div>
+                </div>
+
+                <div class="rhythm-stage" id="rhythm-track">
+                    <div class="rhythm-lanes-container">
+                        <div class="lane-col" data-lane="0">
+                            <div class="target-receptor" style="border-color: #ff2a85; color: #ff2a85;">▲</div>
+                        </div>
+                        <div class="lane-col" data-lane="1">
+                            <div class="target-receptor" style="border-color: #39e6d0; color: #39e6d0;">■</div>
+                        </div>
+                        <div class="lane-col" data-lane="2">
+                            <div class="target-receptor" style="border-color: #8ffff5; color: #8ffff5;">✕</div>
+                        </div>
+                        <div class="lane-col" data-lane="3">
+                            <div class="target-receptor" style="border-color: #f5e050; color: #f5e050;">●</div>
+                        </div>
+                    </div>
+                    <div class="game-rating-popup" id="game-rating">PERFECT!!</div>
+                </div>
+
+                <div class="game-progress-track">
+                    <div class="game-progress-fill" id="game-progress-bar"></div>
+                </div>
+
+                <div class="arcade-controls-row">
+                    <button class="game-key-btn" data-key="d">
+                        <span class="key-label" style="color: #ff2a85;">▲</span>
+                        <span class="key-hint">KEY [D]</span>
+                    </button>
+                    <button class="game-key-btn" data-key="f">
+                        <span class="key-label" style="color: #39e6d0;">■</span>
+                        <span class="key-hint">KEY [F]</span>
+                    </button>
+                    <button class="game-key-btn" data-key="j">
+                        <span class="key-label" style="color: #8ffff5;">✕</span>
+                        <span class="key-hint">KEY [J]</span>
+                    </button>
+                    <button class="game-key-btn" data-key="k">
+                        <span class="key-label" style="color: #f5e050;">●</span>
+                        <span class="key-hint">KEY [K]</span>
+                    </button>
+                </div>
+
+                <div class="cabinet-footer">
+                    <button class="cyber-btn primary" id="start-game-btn">
+                        <span>⚡</span> MAINKAN RHYTHM ARCADE
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             09. SOCIAL MEDIA & CONTACT
+             ========================================================================== -->
+        <section id="contact" class="section-wrapper">
+            <div class="section-header">
+                <span class="section-code">// COMMUNICATION CHANNELS</span>
+                <h2 class="section-title">TRANSMIT <span class="glow">SIGNAL</span></h2>
+                <p class="section-subtitle">Mari berdiskusi seputar peluang proyek, kerja sama, maupun ide teknologi baru.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="contact-section-grid">
+                <!-- Left: Social Channels -->
+                <div class="contact-channels-wrap">
+                    <h3 style="font-size: 1.25rem; color: #fff; margin-bottom: 8px;">GET IN TOUCH</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 0.95rem;">
+                        Saluran komunikasi terbuka untuk diskusi teknis, rekrutmen, dan kolaborasi kreatif.
+                    </p>
+
+                    <div class="social-chips-list" id="socials-list">
+                        <!-- Populated dynamically by main.js -->
+                    </div>
+                </div>
+
+                <!-- Right: Contact Form -->
+                <div class="contact-form-card">
+                    <form id="contact-form" class="contact-form">
+                        <div class="form-group">
+                            <label for="form-name">// NAMA LENGKAP ATAU INSTITUSI</label>
+                            <input type="text" id="form-name" class="cyber-input" placeholder="Masukkan nama Anda..." required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="form-email">// ALAMAT EMAIL</label>
+                            <input type="email" id="form-email" class="cyber-input" placeholder="alamat@domain.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="form-message">// PESAN / KEBUTUHAN PROYEK</label>
+                            <textarea id="form-message" class="cyber-input" placeholder="Tuliskan pesan atau detail proyek Anda di sini..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="cyber-btn primary">
+                            <span>⚡</span> KIRIM PESAN
+                        </button>
+
+                        <div id="contact-feedback"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="hud-footer">
+        <div class="footer-content">
+            <div class="footer-rights">
+                &copy; 2026 // <span>HATSUNE MIKU DIGITAL WORLD PORTFOLIO</span>. Built with Vanilla Standards &amp; Three.js.
+            </div>
+            <div class="footer-easter-egg">
+                TIPS: Tekan tombol <code>~</code> untuk Cyber Terminal CLI | Audio &amp; Character inspired by Hatsune Miku (Crypton Future Media)
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================================================
+         MODALS & DRAWERS
+         ========================================================================== -->
+
+    <!-- Checkpoint Sliding HUD Drawer (Triggered by Miku or Checkpoint clicks) -->
+    <div id="checkpoint-drawer" class="checkpoint-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-checkpoint-title">
+        <div class="drawer-header">
+            <div class="drawer-title-group">
+                <h3 id="drawer-checkpoint-title">CHECKPOINT // NAME</h3>
+                <p id="drawer-checkpoint-subtitle">Informasi rincian checkpoint</p>
+            </div>
+            <button class="drawer-close-btn" id="checkpoint-drawer-close">[TUTUP / ESC]</button>
+        </div>
+
+        <div id="drawer-checkpoint-content">
+            <!-- Populated dynamically -->
+        </div>
+
+        <div class="drawer-actions">
+            <button class="cyber-btn primary" id="drawer-jump-section-btn">
+                Buka Bagian Penuh ↗
+            </button>
+        </div>
+    </div>
+
+    <!-- Project Inspect Detail Modal -->
+    <div class="cyber-modal-backdrop" id="project-detail-modal" role="dialog" aria-modal="true">
+        <div class="cyber-modal-window">
+            <button class="modal-close-btn" id="project-modal-close">[CLOSE / ESC]</button>
+            <div id="project-modal-body">
+                <!-- Dynamically populated by main.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Terminal CLI Console Modal -->
+    <div class="cyber-modal-backdrop" id="terminal-modal" role="dialog" aria-modal="true">
+        <div class="cyber-modal-window terminal-window">
+            <div class="term-top-bar">
+                <span>MIKU-OS // VOCALOID TERMINAL v3.9</span>
+                <button class="modal-close-btn" id="close-terminal-btn" style="position: static; padding: 2px 8px;">[ESC / EXIT]</button>
+            </div>
+            <div class="term-output-area" id="terminal-output">
+                <div class="term-line">
+                    <span class="highlight">MIKU DIGITAL TERMINAL [ONLINE]</span><br>
+                    Connected to System Subsystem. Ketik '<span class="cmd-name">help</span>' untuk daftar perintah.
+                </div>
+            </div>
+            <div class="term-input-row">
+                <span style="color: var(--miku-primary); font-weight: bold;">MIKU-OS:~$</span>
+                <input type="text" id="terminal-input" class="term-input-field" placeholder="Ketik perintah (help, whoami, skills, projects, clear, exit)..." autocomplete="off">
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Engines -->
+    <script src="js/three.min.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/world3d.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/terminal.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
