@@ -76,9 +76,9 @@ class CyberAudioManager {
 
     // UI Hover Sound: subtle cyber chirp
     playHover() {
-        if (this.isMuted) return;
-        this.ensureContext();
-        if (!this.ctx) return;
+        // Hover is not a user activation. Don't create/resume AudioContext here;
+        // the first click (for example Play) initializes audio legally.
+        if (this.isMuted || !this.isInitialized || !this.ctx || this.ctx.state !== 'running') return;
 
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
@@ -214,36 +214,33 @@ class CyberAudioManager {
     toggleBGM() {
         if (this.bgmPlaying) {
             this.stopBGM();
-            return false;
+            return Promise.resolve(false);
         } else {
-            this.startBGM();
-            return true;
+            return this.startBGM();
         }
     }
 
     startBGM() {
         this.ensureContext();
-        if (this.isMuted || !this.ctx) return;
+        if (this.isMuted || !this.ctx) return Promise.resolve(false);
 
         // If audio element is provided and has src, play it
         if (this.audioElement && this.audioElement.src && !this.audioElement.src.endsWith('#')) {
-            this.audioElement.play().then(() => {
-                this.bgmPlaying = true;
-                localStorage.setItem('miku_bgm_enabled', 'true');
+            return this.audioElement.play().then(() => {
+                this.setBGMPlaying(true);
+                return true;
             }).catch(e => {
                 console.warn("Audio element play error, falling back to Web Audio Synth:", e);
-                this.startSynthBGM();
+                return this.startSynthBGM();
             });
-            return;
         }
 
         // Procedural Vocaloid Ambient Synth Arpeggio
-        this.startSynthBGM();
+        return Promise.resolve(this.startSynthBGM());
     }
 
     startSynthBGM() {
-        this.bgmPlaying = true;
-        localStorage.setItem('miku_bgm_enabled', 'true');
+        this.setBGMPlaying(true);
 
         // Pentatonic melody motif inspired by Greenlight Serenade & Magical Mirai cyber arpeggios
         // In D Major (D, E, F#, A, B, D5)
@@ -309,11 +306,11 @@ class CyberAudioManager {
         };
 
         playStep();
+        return true;
     }
 
     stopBGM() {
-        this.bgmPlaying = false;
-        localStorage.setItem('miku_bgm_enabled', 'false');
+        this.setBGMPlaying(false);
         if (this.bgmTimer) {
             clearTimeout(this.bgmTimer);
             this.bgmTimer = null;
@@ -321,6 +318,12 @@ class CyberAudioManager {
         if (this.audioElement) {
             this.audioElement.pause();
         }
+    }
+
+    setBGMPlaying(isPlaying) {
+        this.bgmPlaying = isPlaying;
+        localStorage.setItem('miku_bgm_enabled', String(isPlaying));
+        window.dispatchEvent(new CustomEvent('cyber:bgm-state', { detail: { isPlaying } }));
     }
 }
 

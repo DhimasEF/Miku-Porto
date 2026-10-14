@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Portfolio developer & creative technologist profesional yang disajikan sebagai dunia digital interaktif bertema Hatsune Miku dengan low-poly 3D aesthetics, modern UI, dan eksplorasi dinamis.">
-    <meta name="keywords" content="Portfolio Developer, Fullstack Engineer, Creative Developer, Hatsune Miku, Three.js, Web Audio, Interactive Portfolio, WebGL, Low Poly">
-    <meta name="author" content="Hatsune Developer">
+    <meta name="description" content="Portfolio of Dhimas Erzal Firmansyah — Web & Application Developer | UI/UX. Explore an interactive 3D digital world and featured projects.">
+    <meta name="keywords" content="Dhimas Erzal Firmansyah, Portfolio Developer, Web Developer, UI/UX, Flutter, VB.NET, CodeIgniter, PHP, MySQL, Three.js">
+    <meta name="author" content="Dhimas Erzal Firmansyah">
     <meta name="theme-color" content="#071116">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Developer Portfolio — Interactive 3D Digital World">
-    <meta property="og:description" content="A modern professional CV portfolio presented as a small interactive Hatsune Miku-inspired digital world.">
+    <meta property="og:title" content="Dhimas Erzal Firmansyah — Web & App Developer Portfolio">
+    <meta property="og:description" content="Portfolio of Dhimas Erzal Firmansyah, Web & Application Developer | UI/UX. Explore an interactive 3D digital world.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/miku_chibi_pixel.png">
 
-    <title>Hatsune Developer — Modern Portfolio & 3D Digital World</title>
+    <title>Dhimas Erzal Firmansyah — Web & App Developer | Portfolio</title>
 
     <link rel="icon" type="image/png" href="assets/miku_chibi_pixel.png">
     <link rel="stylesheet" href="css/style.css">
@@ -23,6 +23,9 @@
 
     <!-- Background Atmospheric Matrix Canvas -->
     <canvas id="bg-canvas"></canvas>
+
+    <!-- Background Music Audio Element -->
+    <audio id="bgm-audio" src="assets/greenlight.mp3" loop preload="metadata"></audio>
 
     <!-- Decorative Cyber Corner Frame -->
     <div class="cyber-fixed-frame" aria-hidden="true">
@@ -36,18 +39,17 @@
     <header class="hud-header">
         <div class="hud-container">
             <!-- Brand / Logo -->
-            <a href="#hero" class="hud-brand" id="brand-logo" aria-label="Beranda Portfolio">
-                <div class="brand-icon">01</div>
+            <a href="#hero" class="hud-brand" id="brand-logo" aria-label="Portfolio Home">
+                <div class="brand-icon">DE</div>
                 <div class="brand-text">
-                    <span class="brand-title">MIKU / DEV</span>
+                    <span class="brand-title">DHIMAS / DEV</span>
                     <span class="brand-tag">PORTFOLIO</span>
                 </div>
             </a>
 
             <!-- Navigation Links -->
-            <nav class="hud-nav" id="main-nav-links" aria-label="Navigasi Utama">
+            <nav class="hud-nav" id="main-nav-links" aria-label="Main Navigation">
                 <a href="#hero" class="nav-link">HOME</a>
-                <a href="#world" class="nav-link">3D WORLD</a>
                 <a href="#about" class="nav-link">ABOUT</a>
                 <a href="#skills" class="nav-link">SKILLS</a>
                 <a href="#projects" class="nav-link">PROJECTS</a>
@@ -58,32 +60,32 @@
 
             <!-- HUD Control Actions -->
             <div class="hud-actions">
-                <!-- Mode Switcher (Explore 3D vs Normal CV) -->
-                <button class="mode-toggle-btn" id="mode-toggle-btn" title="Ganti Mode Navigasi" aria-label="Toggle Mode Navigasi">
-                    <span id="mode-toggle-icon">✦</span>
-                    <span id="mode-toggle-label">MODE: 3D WORLD</span>
-                </button>
 
-                <!-- Audio Toggle (BGM) -->
-                <button class="hud-btn" id="audio-toggle-btn" title="Toggle Musik Latar" aria-label="Toggle Background Music">
-                    <span>♫</span> MUSIC: OFF
-                </button>
-
-                <!-- SFX Toggle -->
-                <button class="hud-btn" id="sfx-toggle-btn" title="Toggle Sound FX" aria-label="Toggle Sound Effects">
-                    <span>⚡</span> SFX: ON
-                </button>
+                <!-- Audio Dropdown -->
+                <div class="audio-dropdown-wrap" id="audio-dropdown-wrap">
+                    <button class="hud-btn audio-dropdown-trigger" id="audio-dropdown-trigger" aria-label="Audio Settings" title="Audio Settings">
+                        <span>♫</span> AUDIO
+                    </button>
+                    <div class="audio-dropdown-menu" id="audio-dropdown-menu" role="menu">
+                        <div class="audio-dropdown-header">// AUDIO SETTINGS</div>
+                        <button class="audio-dropdown-item" id="audio-toggle-btn" title="Toggle Background Music" aria-label="Toggle BGM">
+                            <span>♫</span> MUSIC: OFF
+                        </button>
+                        <button class="audio-dropdown-item" id="sfx-toggle-btn" title="Toggle Sound Effects" aria-label="Toggle SFX">
+                            <span>⚡</span> SFX: ON
+                        </button>
+                        <div class="audio-dropdown-divider"></div>
+                        <div class="audio-dropdown-clock" id="hud-system-clock" aria-hidden="true">00:00:00</div>
+                    </div>
+                </div>
 
                 <!-- Terminal Console Trigger -->
-                <button class="hud-btn" id="open-terminal-btn" title="Buka Cyber Terminal CLI (~)" aria-label="Open CLI Terminal">
+                <button class="hud-btn" id="open-terminal-btn" title="Open Cyber Terminal CLI (~)" aria-label="Open CLI Terminal">
                     <span>&gt;_</span> CLI
                 </button>
 
-                <!-- System Clock -->
-                <span class="hud-btn" id="hud-system-clock" title="System Time" aria-hidden="true">00:00:00</span>
-
                 <!-- Mobile Menu Hamburger -->
-                <button class="mobile-menu-btn" id="mobile-menu-toggle" aria-label="Buka Menu Mobile">
+                <button class="mobile-menu-btn" id="mobile-menu-toggle" aria-label="Open Mobile Menu">
                     ☰
                 </button>
             </div>
@@ -102,30 +104,30 @@
                 <div class="hero-content">
                     <div class="hero-telemetry-badge">
                         <span class="telemetry-pulse"></span>
-                        <span class="telemetry-text">OPEN FOR OPPORTUNITIES · CREATIVE DEVELOPER</span>
+                        <span class="telemetry-text">OPEN FOR OPPORTUNITIES · WEB & APP DEVELOPER</span>
                     </div>
 
                     <h1 class="hero-title">
                         HELLO, I'M<br>
-                        <span id="hero-name" class="text-cyan">YOUR NAME</span>
+                        <span id="hero-name" class="text-cyan">DHIMAS</span>
                     </h1>
 
-                    <div id="hero-role" class="hero-role">FULLSTACK DEVELOPER &amp; CREATIVE TECHNOLOGIST</div>
+                    <div id="hero-role" class="hero-role">WEB &amp; APPLICATION DEVELOPER | UI/UX</div>
 
                     <p id="hero-bio" class="hero-bio">
-                        Building things, exploring ideas, and turning imagination into something real. Menggabungkan kode berkinerja tinggi dengan antarmuka digital yang memukau.
+                        Building functional, structured &amp; user-friendly web and desktop applications.
                     </p>
 
-                    <!-- CTAs for Both Exploration and Standard CV -->
+                    <!-- CTAs -->
                     <div class="hero-cta-group">
-                        <a href="#world" class="cyber-btn primary" id="btn-hero-explore">
-                            <span>✦</span> START JOURNEY (3D WORLD)
-                        </a>
-                        <a href="#about" class="cyber-btn secondary" id="btn-hero-cv">
+                        <a href="#about" class="cyber-btn primary" id="btn-hero-cv">
                             <span>↘</span> VIEW FULL CV
                         </a>
+                        <a href="#projects" class="cyber-btn secondary">
+                            <span>❖</span> SEE PROJECTS
+                        </a>
                         <a href="#contact" class="cyber-btn secondary">
-                            <span>✉</span> HUBUNGI SAYA
+                            <span>✉</span> CONTACT ME
                         </a>
                     </div>
 
@@ -135,7 +137,7 @@
                     </div>
                 </div>
 
-                <!-- Right: 3D Hologram Chibi Miku Card -->
+                <!-- Right: Profile Card -->
                 <div class="hero-hologram-wrapper">
                     <div class="hero-holo-card" id="hero-avatar-card">
                         <div class="card-top-bar">
@@ -144,14 +146,14 @@
                         </div>
 
                         <div class="holo-image-frame">
-                            <img src="assets/miku_chibi_pixel.png" alt="Chibi Hatsune Miku 3D Voxel Pixelated Guide" class="miku-avatar-img">
+                            <img src="assets/miku_chibi_pixel.png" alt="Portfolio Avatar" class="miku-avatar-img">
                             <div class="holo-scanlines"></div>
                         </div>
 
                         <div class="holo-meta-bar">
-                            <span class="status-badge">AVATAR: ONLINE</span>
-                            <span style="color: var(--text-secondary);">VOCALOID UNIT 01</span>
-                            <span style="color: var(--miku-primary); font-weight: 600;">ACTIVE GUIDE</span>
+                            <span class="status-badge">AVAILABLE</span>
+                            <span style="color: var(--text-secondary);">DEV UNIT 01</span>
+                            <span style="color: var(--miku-primary); font-weight: 600;">ACTIVE</span>
                         </div>
                     </div>
                 </div>
@@ -166,7 +168,7 @@
                 <span class="section-code">INTERACTIVE EXPLORATION</span>
                 <h2 class="section-title">A SMALL <span class="glow">DIGITAL WORLD</span></h2>
                 <p class="section-subtitle">
-                    Jelajahi pulau digital kecil ini bersama <strong>Chibi Miku</strong> menggunakan tombol <strong>WASD</strong>, <strong>Tombol Panah</strong>, atau klik tanah untuk berjalan. Dekati checkpoint untuk membuka informasi terkait.
+                    Explore this digital island with <strong>Chibi Miku</strong> using <strong>WASD</strong>, <strong>Arrow Keys</strong>, or click on the ground to walk. Use the Miku Style buttons to switch her look, and approach checkpoints to unlock information.
                 </p>
                 <div class="section-divider"></div>
             </div>
@@ -177,7 +179,7 @@
 
                 <!-- HUD Top: Quick Checkpoint Jump Pills -->
                 <div class="world-hud-top">
-                    <div class="world-checkpoints-pills" aria-label="Checkpoint Navigasi Cepat">
+                    <div class="world-checkpoints-pills" aria-label="Quick Checkpoint Navigation">
                         <button class="world-checkpoint-nav-btn active" data-checkpoint="start">START</button>
                         <button class="world-checkpoint-nav-btn" data-checkpoint="about">PROFILE</button>
                         <button class="world-checkpoint-nav-btn" data-checkpoint="skills">SKILLS</button>
@@ -188,13 +190,22 @@
                     </div>
                 </div>
 
-                <!-- Floating Interaction Prompt (Visible when near a checkpoint) -->
+                <div class="avatar-skin-switcher" role="group" aria-label="Choose Miku's outfit">
+                    <span class="avatar-skin-label">MIKU STYLE</span>
+                    <button class="avatar-skin-btn active" data-skin="original" aria-pressed="true">ORIGINAL</button>
+                    <button class="avatar-skin-btn" data-skin="stage" aria-pressed="false">STAGE</button>
+                    <button class="avatar-skin-btn" data-skin="street" aria-pressed="false">STREET</button>
+                    <button class="avatar-skin-btn" data-skin="wonderland" aria-pressed="false">WONDERLAND</button>
+                    <button class="avatar-skin-btn" data-skin="empty" aria-pressed="false">EMPTY</button>
+                </div>
+
+                <!-- Floating Interaction Prompt -->
                 <div id="world-interaction-prompt" class="world-interaction-prompt" role="alert" aria-live="polite">
                     <div class="prompt-text-group">
                         <span id="world-prompt-title" class="prompt-title">CHECKPOINT // NAME</span>
-                        <span id="world-prompt-subtitle" class="prompt-subtitle">Dekati untuk melihat rincian</span>
+                        <span id="world-prompt-subtitle" class="prompt-subtitle">Approach to view details</span>
                     </div>
-                    <button id="world-open-btn" class="world-open-btn">BUKA [E]</button>
+                    <button id="world-open-btn" class="world-open-btn">OPEN [E]</button>
                 </div>
 
                 <!-- HUD Bottom: Status & Mobile D-Pad -->
@@ -204,14 +215,14 @@
                     </div>
 
                     <!-- On-Screen Virtual D-Pad for Mobile Touch -->
-                    <div class="world-dpad-container" aria-label="Kontrol Layar Sentuh Mobile">
+                    <div class="world-dpad-container" aria-label="Mobile Touch Controls">
                         <div class="world-dpad-row">
-                            <button class="world-dpad-btn" data-dir="up" aria-label="Gerak ke Atas">↑</button>
+                            <button class="world-dpad-btn" data-dir="up" aria-label="Move Up">↑</button>
                         </div>
                         <div class="world-dpad-row">
-                            <button class="world-dpad-btn" data-dir="left" aria-label="Gerak ke Kiri">←</button>
-                            <button class="world-dpad-btn" data-dir="down" aria-label="Gerak ke Bawah">↓</button>
-                            <button class="world-dpad-btn" data-dir="right" aria-label="Gerak ke Kanan">→</button>
+                            <button class="world-dpad-btn" data-dir="left" aria-label="Move Left">←</button>
+                            <button class="world-dpad-btn" data-dir="down" aria-label="Move Down">↓</button>
+                            <button class="world-dpad-btn" data-dir="right" aria-label="Move Right">→</button>
                         </div>
                     </div>
                 </div>
@@ -223,28 +234,24 @@
              ========================================================================== -->
         <section id="about" class="section-wrapper">
             <div class="section-header">
-                <span class="section-code">// PROFILE &amp; PHILOSOPHY</span>
+                <span class="section-code">// PROFILE &amp; BACKGROUND</span>
                 <h2 class="section-title">ABOUT <span class="glow">ME</span></h2>
-                <p class="section-subtitle">Profil profesional, fokus keahlian, dan dedikasi dalam membangun produk digital modern.</p>
+                <p class="section-subtitle">Professional profile, core expertise, and dedication to building modern digital products.</p>
                 <div class="section-divider"></div>
             </div>
 
             <div class="about-card">
                 <div class="about-avatar-wrap">
-                    <img src="assets/miku_chibi_pixel.png" alt="Avatar Profil Hatsune Miku 3D Voxel" class="about-avatar-img">
+                    <img src="assets/miku_chibi_pixel.png" alt="Profile Avatar" class="about-avatar-img">
                 </div>
                 <div class="about-info-wrap">
-                    <span class="about-tag">DIGITAL ARCHITECT // IDENTITY</span>
-                    <h3 id="about-name" class="about-name">YOUR NAME</h3>
-                    <div id="about-title" class="about-title">Fullstack Developer &amp; Creative Technologist</div>
+                    <span class="about-tag">WEB & APP DEVELOPER // IDENTITY</span>
+                    <h3 id="about-name" class="about-name">Dhimas Erzal Firmansyah</h3>
+                    <div id="about-title" class="about-title">Web &amp; Application Developer | UI/UX</div>
                     <p id="about-bio" class="about-bio">
-                        Saya senang mengubah ide dan konsep menjadi produk digital yang intuitif, estetis, dan berkinerja tinggi. Dengan pengalaman lintas platform mulai dari web apps modern hingga eksplorasi interaktif 3D dan Web Audio, setiap detail dirancang dengan cermat dan berorientasi pada kepuasan pengguna.
+                        Computer Science graduate with experience in web &amp; desktop application development, REST API integration, database management, and technical support. Passionate about building functional, structured, and user-friendly applications.
                     </p>
                     <div class="about-meta-row">
-                        <div class="meta-item">
-                            <span class="icon">📍</span>
-                            <span id="about-location">Jakarta / Remote Worldwide</span>
-                        </div>
                         <div class="meta-item">
                             <span class="icon">✦</span>
                             <span id="about-status">Open for Opportunities &amp; Collaborations</span>
@@ -252,7 +259,7 @@
                     </div>
                     <div style="margin-top: 14px;">
                         <a href="#contact" class="cyber-btn primary">
-                            <span>✉</span> AJUKAN KERJA SAMA
+                            <span>✉</span> GET IN TOUCH
                         </a>
                     </div>
                 </div>
@@ -266,7 +273,7 @@
             <div class="section-header">
                 <span class="section-code">// TECHNICAL STACK</span>
                 <h2 class="section-title">SKILLS &amp; <span class="glow">CAPABILITIES</span></h2>
-                <p class="section-subtitle">Penguasaan teknologi modern, arsitektur kode, framework frontend/backend, dan creative tools.</p>
+                <p class="section-subtitle">Proficiency in modern technologies, frameworks, database management, and creative tools.</p>
                 <div class="section-divider"></div>
             </div>
 
@@ -282,15 +289,14 @@
             <div class="section-header">
                 <span class="section-code">// FEATURED WORK</span>
                 <h2 class="section-title">MY <span class="glow">PROJECTS</span></h2>
-                <p class="section-subtitle">Pilihan proyek unggulan mencakup Web Audio, 3D WebGL, dan aplikasi fullstack responsif.</p>
+                <p class="section-subtitle">A selection of featured projects including web systems, data dashboards, and fullstack applications.</p>
                 <div class="section-divider"></div>
             </div>
 
             <!-- Filter Buttons -->
             <div class="project-filter-bar" id="project-filter-buttons">
-                <button class="filter-btn active" data-filter="all">SEMUA PROYEK</button>
-                <button class="filter-btn" data-filter="audio">AUDIO &amp; SYNTH</button>
-                <button class="filter-btn" data-filter="3d">3D &amp; WEBGL</button>
+                <button class="filter-btn active" data-filter="all">ALL PROJECTS</button>
+                <button class="filter-btn" data-filter="3d">DASHBOARD</button>
                 <button class="filter-btn" data-filter="fullstack">FULLSTACK</button>
             </div>
 
@@ -307,14 +313,14 @@
             <div class="section-header">
                 <span class="section-code">// CAREER &amp; ACADEMICS</span>
                 <h2 class="section-title">EXPERIENCE &amp; <span class="glow">EDUCATION</span></h2>
-                <p class="section-subtitle">Rekam jejak kontribusi profesional dan latar belakang pendidikan formal.</p>
+                <p class="section-subtitle">Professional track record and formal academic background.</p>
                 <div class="section-divider"></div>
             </div>
 
             <div class="timeline-section-grid">
                 <!-- Experience Column -->
                 <div class="timeline-column">
-                    <h3><span>💼</span> PENGALAMAN KERJA</h3>
+                    <h3><span>💼</span> WORK EXPERIENCE</h3>
                     <div class="timeline-track" id="experience-timeline">
                         <!-- Populated dynamically by main.js -->
                     </div>
@@ -322,7 +328,7 @@
 
                 <!-- Education Column -->
                 <div class="timeline-column">
-                    <h3><span>🎓</span> PENDIDIKAN</h3>
+                    <h3><span>🎓</span> EDUCATION</h3>
                     <div class="timeline-track" id="education-timeline">
                         <!-- Populated dynamically by main.js -->
                     </div>
@@ -338,7 +344,7 @@
                 <span class="section-code">// OPEN SOURCE &amp; CODE</span>
                 <h2 class="section-title">GITHUB <span class="glow">HIGHLIGHTS</span></h2>
                 <p class="section-subtitle">
-                    Repositori publik dan kontribusi open source langsung dari <a id="github-user-link" href="https://github.com" target="_blank" rel="noopener noreferrer" style="color: var(--miku-primary); text-decoration: none;">GitHub</a>.
+                    Public repositories and open source contributions directly from <a id="github-user-link" href="https://github.com/DhimasEF" target="_blank" rel="noopener noreferrer" style="color: var(--miku-primary); text-decoration: none;">GitHub</a>.
                 </p>
                 <div class="section-divider"></div>
             </div>
@@ -349,14 +355,14 @@
         </section>
 
         <!-- ==========================================================================
-             08. OPTIONAL ARCADE & LAB (Preserved Feature)
+             08. ARCADE & LAB
              ========================================================================== -->
         <section id="arcade" class="section-wrapper">
             <div class="section-header">
                 <span class="section-code">// RECREATIONAL PROTOCOL // VOCALOID ARCADE</span>
                 <h2 class="section-title">DIVA BEAT <span class="glow">ARCADE</span></h2>
                 <p class="section-subtitle">
-                    Mini-game ritme interaktif berbasis Web Audio API. Tekan tombol [D], [F], [J], [K] atau tap pada layar sesuai beat.
+                    A rhythm mini-game set to the 2:42–4:00 excerpt from the bundled track. Hit single notes, chords, and holds with [D], [F], [J], [K] or the on-screen keys.
                 </p>
                 <div class="section-divider"></div>
             </div>
@@ -364,7 +370,7 @@
             <div class="game-arcade-cabinet" id="diva-game-container">
                 <div class="cabinet-header">
                     <span>PROJECT DIVA // CYBER-RHYTHM 39</span>
-                    <span style="color: var(--miku-pink-accent);">TEMPO: 135 BPM</span>
+                    <span style="color: var(--miku-pink-accent);">TEMPO: 200 BPM</span>
                 </div>
 
                 <div class="cabinet-scoreboard">
@@ -401,7 +407,7 @@
                             <div class="target-receptor" style="border-color: #f5e050; color: #f5e050;">●</div>
                         </div>
                     </div>
-                    <div class="game-rating-popup" id="game-rating">PERFECT!!</div>
+                    <div class="game-rating-popup" id="game-rating" aria-live="polite"></div>
                 </div>
 
                 <div class="game-progress-track">
@@ -429,7 +435,7 @@
 
                 <div class="cabinet-footer">
                     <button class="cyber-btn primary" id="start-game-btn">
-                        <span>⚡</span> MAINKAN RHYTHM ARCADE
+                        <span>⚡</span> PLAY RHYTHM ARCADE
                     </button>
                 </div>
             </div>
@@ -442,7 +448,7 @@
             <div class="section-header">
                 <span class="section-code">// COMMUNICATION CHANNELS</span>
                 <h2 class="section-title">TRANSMIT <span class="glow">SIGNAL</span></h2>
-                <p class="section-subtitle">Mari berdiskusi seputar peluang proyek, kerja sama, maupun ide teknologi baru.</p>
+                <p class="section-subtitle">Let's discuss project opportunities, collaboration, or any new tech ideas.</p>
                 <div class="section-divider"></div>
             </div>
 
@@ -451,7 +457,7 @@
                 <div class="contact-channels-wrap">
                     <h3 style="font-size: 1.25rem; color: #fff; margin-bottom: 8px;">GET IN TOUCH</h3>
                     <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 0.95rem;">
-                        Saluran komunikasi terbuka untuk diskusi teknis, rekrutmen, dan kolaborasi kreatif.
+                        Open communication channels for technical discussion, recruitment, and creative collaboration.
                     </p>
 
                     <div class="social-chips-list" id="socials-list">
@@ -463,22 +469,22 @@
                 <div class="contact-form-card">
                     <form id="contact-form" class="contact-form">
                         <div class="form-group">
-                            <label for="form-name">// NAMA LENGKAP ATAU INSTITUSI</label>
-                            <input type="text" id="form-name" class="cyber-input" placeholder="Masukkan nama Anda..." required>
+                            <label for="form-name">// FULL NAME OR INSTITUTION</label>
+                            <input type="text" id="form-name" class="cyber-input" placeholder="Enter your name..." required>
                         </div>
 
                         <div class="form-group">
-                            <label for="form-email">// ALAMAT EMAIL</label>
-                            <input type="email" id="form-email" class="cyber-input" placeholder="alamat@domain.com" required>
+                            <label for="form-email">// EMAIL ADDRESS</label>
+                            <input type="email" id="form-email" class="cyber-input" placeholder="your@email.com" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="form-message">// PESAN / KEBUTUHAN PROYEK</label>
-                            <textarea id="form-message" class="cyber-input" placeholder="Tuliskan pesan atau detail proyek Anda di sini..." required></textarea>
+                            <label for="form-message">// MESSAGE / PROJECT DETAILS</label>
+                            <textarea id="form-message" class="cyber-input" placeholder="Write your message or project details here..." required></textarea>
                         </div>
 
                         <button type="submit" class="cyber-btn primary">
-                            <span>⚡</span> KIRIM PESAN
+                            <span>⚡</span> SEND MESSAGE
                         </button>
 
                         <div id="contact-feedback"></div>
@@ -493,10 +499,10 @@
     <footer class="hud-footer">
         <div class="footer-content">
             <div class="footer-rights">
-                &copy; 2026 // <span>HATSUNE MIKU DIGITAL WORLD PORTFOLIO</span>. Built with Vanilla Standards &amp; Three.js.
+                &copy; 2026 // <span>DHIMAS ERZAL FIRMANSYAH — DIGITAL PORTFOLIO</span>. Built with Vanilla JS &amp; Three.js.
             </div>
             <div class="footer-easter-egg">
-                TIPS: Tekan tombol <code>~</code> untuk Cyber Terminal CLI | Audio &amp; Character inspired by Hatsune Miku (Crypton Future Media)
+                TIP: Press <code>~</code> to open Cyber Terminal CLI | 3D World powered by Three.js
             </div>
         </div>
     </footer>
@@ -510,9 +516,9 @@
         <div class="drawer-header">
             <div class="drawer-title-group">
                 <h3 id="drawer-checkpoint-title">CHECKPOINT // NAME</h3>
-                <p id="drawer-checkpoint-subtitle">Informasi rincian checkpoint</p>
+                <p id="drawer-checkpoint-subtitle">Checkpoint details</p>
             </div>
-            <button class="drawer-close-btn" id="checkpoint-drawer-close">[TUTUP / ESC]</button>
+            <button class="drawer-close-btn" id="checkpoint-drawer-close">[CLOSE / ESC]</button>
         </div>
 
         <div id="drawer-checkpoint-content">
@@ -521,7 +527,7 @@
 
         <div class="drawer-actions">
             <button class="cyber-btn primary" id="drawer-jump-section-btn">
-                Buka Bagian Penuh ↗
+                Open Full Section ↗
             </button>
         </div>
     </div>
@@ -546,12 +552,12 @@
             <div class="term-output-area" id="terminal-output">
                 <div class="term-line">
                     <span class="highlight">MIKU DIGITAL TERMINAL [ONLINE]</span><br>
-                    Connected to System Subsystem. Ketik '<span class="cmd-name">help</span>' untuk daftar perintah.
+                    Connected to System. Type '<span class="cmd-name">help</span>' for available commands.
                 </div>
             </div>
             <div class="term-input-row">
                 <span style="color: var(--miku-primary); font-weight: bold;">MIKU-OS:~$</span>
-                <input type="text" id="terminal-input" class="term-input-field" placeholder="Ketik perintah (help, whoami, skills, projects, clear, exit)..." autocomplete="off">
+                <input type="text" id="terminal-input" class="term-input-field" placeholder="Type a command (help, whoami, skills, projects, clear, exit)..." autocomplete="off">
             </div>
         </div>
     </div>
@@ -562,6 +568,7 @@
     <script src="js/audio.js"></script>
     <script src="js/particles.js"></script>
     <script src="js/world3d.js"></script>
+    <script src="js/osu-chart.js"></script>
     <script src="js/game.js"></script>
     <script src="js/terminal.js"></script>
     <script src="js/main.js"></script>

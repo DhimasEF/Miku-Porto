@@ -22,7 +22,6 @@ class PortfolioController {
         this.renderContact();
 
         this.setupNavigation();
-        this.setupModeSwitcher();
         this.setupCheckpointListener();
         this.setupProjectModal();
         this.setupAudioControls();
@@ -64,13 +63,11 @@ class PortfolioController {
         const aboutName = document.getElementById('about-name');
         const aboutTitle = document.getElementById('about-title');
         const aboutBio = document.getElementById('about-bio');
-        const aboutLocation = document.getElementById('about-location');
         const aboutStatus = document.getElementById('about-status');
 
         if (aboutName) aboutName.textContent = p.name;
         if (aboutTitle) aboutTitle.textContent = p.title;
         if (aboutBio) aboutBio.textContent = p.bio;
-        if (aboutLocation) aboutLocation.textContent = p.location;
         if (aboutStatus) aboutStatus.textContent = p.status;
     }
 
@@ -129,11 +126,6 @@ class PortfolioController {
                         <button class="cyber-btn secondary inspect-proj-btn" data-id="${proj.id}">
                             <span>◈</span> INSPECT
                         </button>
-                        ${proj.demo ? `
-                            <a href="${proj.demo}" class="cyber-btn primary">
-                                <span>⚡</span> LIVE DEMO
-                            </a>
-                        ` : ''}
                         ${proj.github ? `
                             <a href="${proj.github}" target="_blank" rel="noopener noreferrer" class="cyber-btn secondary">
                                 <span>⌥</span> GITHUB
@@ -179,7 +171,7 @@ class PortfolioController {
                     <div class="timeline-dot"></div>
                     <span class="timeline-period">${item.period}</span>
                     <h3 class="timeline-role">${item.role}</h3>
-                    <div class="timeline-meta">${item.organization} · ${item.location}</div>
+                    <div class="timeline-meta">${item.organization}</div>
                     <p class="timeline-desc">${item.description}</p>
                 </div>
             `).join('');
@@ -212,7 +204,7 @@ class PortfolioController {
 
         const renderCards = (repos) => {
             container.innerHTML = repos.map(repo => `
-                <a href="${repo.url || repo.html_url}" target="_blank" rel="noopener noreferrer" class="github-repo-card">
+                <a href="https://github.com/${this.data.github.username}/${encodeURIComponent(repo.name)}" target="_blank" rel="noopener noreferrer" class="github-repo-card">
                     <div class="repo-card-top">
                         <span class="repo-icon">⌥</span>
                         <h4 class="repo-name">${repo.name}</h4>
@@ -228,7 +220,7 @@ class PortfolioController {
         };
 
         // Show Skeleton / Loading
-        container.innerHTML = `<div class="gh-loading"><span>✦</span> Mengambil repositori GitHub terkini...</div>`;
+        container.innerHTML = `<div class="gh-loading"><span>✦</span> Fetching latest GitHub repositories...</div>`;
 
         try {
             const controller = new AbortController();
@@ -242,10 +234,16 @@ class PortfolioController {
             if (!res.ok) throw new Error("GitHub API rate limit or error");
             const repos = await res.json();
 
+            // Fix repo URLs to point directly to github.com/username/reponame
+            const fixUrl = (repo) => ({
+                ...repo,
+                html_url: `https://github.com/${gh.username}/${repo.name}`
+            });
+
             if (Array.isArray(repos) && repos.length >= 3) {
-                renderCards(repos);
+                renderCards(repos.map(fixUrl));
             } else if (Array.isArray(repos) && repos.length > 0) {
-                const combined = [...repos, ...gh.fallbackRepos.slice(repos.length)];
+                const combined = [...repos.map(fixUrl), ...gh.fallbackRepos.slice(repos.length)];
                 renderCards(combined);
             } else {
                 renderCards(gh.fallbackRepos);
@@ -278,16 +276,36 @@ class PortfolioController {
         if (!c) return;
 
         const emailEl = document.getElementById('contact-email-val');
-        const locEl = document.getElementById('contact-location-val');
         if (emailEl) {
             emailEl.textContent = c.email;
             emailEl.href = `mailto:${c.email}`;
         }
-        if (locEl) locEl.textContent = c.location;
     }
 
     // 9. NAVIGATION & SMOOTH SCROLL
     setupNavigation() {
+        const getHeaderOffset = () => {
+            const header = document.querySelector('.hud-header');
+            return header ? header.offsetHeight + 16 : 88;
+        };
+
+        const smoothScrollTo = (targetEl) => {
+            const startY = window.scrollY;
+            const targetY = Math.max(0, targetEl.getBoundingClientRect().top + startY - getHeaderOffset());
+            const distance = targetY - startY;
+            const duration = Math.min(1100, Math.max(650, Math.abs(distance) * 0.45));
+            const startTime = performance.now();
+            const animate = (now) => {
+                const progress = Math.min(1, (now - startTime) / duration);
+                const eased = progress < 0.5
+                    ? 4 * progress * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+                window.scrollTo(0, startY + distance * eased);
+                if (progress < 1) requestAnimationFrame(animate);
+            };
+            requestAnimationFrame(animate);
+        };
+
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', (e) => {
                 const targetId = anchor.getAttribute('href');
@@ -295,12 +313,15 @@ class PortfolioController {
                     e.preventDefault();
                     const targetEl = document.querySelector(targetId);
                     if (targetEl) {
-                        targetEl.scrollIntoView({ behavior: 'smooth' });
+                        smoothScrollTo(targetEl);
                         if (window.cyberAudio) window.cyberAudio.playClick();
                     }
                 }
             });
         });
+
+        // Also expose smoothScrollTo globally for use elsewhere
+        window._smoothScrollTo = smoothScrollTo;
 
         // Mobile Menu Drawer Toggle
         const menuBtn = document.getElementById('mobile-menu-toggle');
@@ -322,59 +343,8 @@ class PortfolioController {
         }
     }
 
-    // 10. NAVIGATION MODES (Explore 3D vs Normal CV)
-    setupModeSwitcher() {
-        const toggleBtn = document.getElementById('mode-toggle-btn');
-        const heroExploreBtn = document.getElementById('btn-hero-explore');
-        const heroNormalBtn = document.getElementById('btn-hero-cv');
-
-        const updateModeUI = (mode) => {
-            this.currentMode = mode;
-            localStorage.setItem('portfolio_mode', mode);
-
-            const modeLabel = document.getElementById('mode-toggle-label');
-            if (modeLabel) {
-                modeLabel.textContent = mode === 'explore' ? 'MODE: 3D WORLD' : 'MODE: NORMAL CV';
-            }
-            if (toggleBtn) {
-                toggleBtn.classList.toggle('is-explore', mode === 'explore');
-            }
-
-            document.body.classList.toggle('mode-explore', mode === 'explore');
-        };
-
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', () => {
-                const nextMode = this.currentMode === 'explore' ? 'normal' : 'explore';
-                updateModeUI(nextMode);
-                if (window.cyberAudio) window.cyberAudio.playClick();
-
-                if (nextMode === 'explore') {
-                    document.getElementById('world')?.scrollIntoView({ behavior: 'smooth' });
-                } else {
-                    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        }
-
-        if (heroExploreBtn) {
-            heroExploreBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                updateModeUI('explore');
-                document.getElementById('world')?.scrollIntoView({ behavior: 'smooth' });
-            });
-        }
-
-        if (heroNormalBtn) {
-            heroNormalBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                updateModeUI('normal');
-                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-            });
-        }
-
-        updateModeUI(this.currentMode);
-    }
+    // 10. NAVIGATION MODES (removed - no mode switcher)
+    // setupModeSwitcher() is no longer used.
 
     // 11. 3D DIGITAL WORLD INITIALIZATION
     init3DWorld() {
@@ -420,7 +390,7 @@ class PortfolioController {
 
             // Configure Jump Button
             if (drawerJumpBtn) {
-                drawerJumpBtn.textContent = `Buka Bagian ${cp.name} Penuh ↗`;
+                drawerJumpBtn.textContent = `Open ${cp.name} Section ↗`;
                 drawerJumpBtn.onclick = () => {
                     closeDrawer();
                     document.getElementById(cp.id)?.scrollIntoView({ behavior: 'smooth' });
@@ -436,8 +406,8 @@ class PortfolioController {
             case 'start':
                 return `
                     <div class="cp-preview-box">
-                        <p>Halo! Selamat datang di dunia digital portfolio. Anda dapat menggerakkan <strong>Chibi Miku</strong> menggunakan tombol <strong>WASD</strong>, <strong>Tombol Panah</strong>, atau langsung mengklik tanah pada pulau digital ini.</p>
-                        <p>Kunjungi setiap checkpoint untuk membaca informasi keahlian, proyek unggulan, GitHub, dan kontak.</p>
+                        <p>Welcome to the digital portfolio world! Move <strong>Chibi Miku</strong> using <strong>WASD</strong>, <strong>Arrow Keys</strong>, or click on the island ground.</p>
+                        <p>Visit each checkpoint to read about skills, featured projects, GitHub, and contact info.</p>
                     </div>
                 `;
             case 'about':
@@ -448,7 +418,6 @@ class PortfolioController {
                         <p class="highlight-text">${p.title}</p>
                         <p>${p.bio}</p>
                         <div class="cp-tags-row">
-                            <span class="badge">📍 ${p.location}</span>
                             <span class="badge">✦ ${p.status}</span>
                         </div>
                     </div>
@@ -456,8 +425,8 @@ class PortfolioController {
             case 'skills':
                 return `
                     <div class="cp-preview-box">
-                        <p>Keahlian mencakup <strong>JavaScript/TypeScript</strong>, <strong>React/Next.js</strong>, <strong>PHP/CodeIgniter</strong>, <strong>Flutter/Dart</strong>, <strong>Three.js</strong>, dan <strong>Web Audio API</strong>.</p>
-                        <p>Buka bagian lengkap untuk melihat rincian penguasaan teknis dan tools yang digunakan.</p>
+                        <p>Skills include <strong>PHP/CodeIgniter</strong>, <strong>JavaScript/Node.js</strong>, <strong>Flutter</strong>, <strong>VB.NET/Windows Forms</strong>, <strong>MySQL/MariaDB</strong>, and <strong>Grafana</strong>.</p>
+                        <p>Open the full section to see detailed proficiency levels and tools.</p>
                     </div>
                 `;
             case 'projects':
@@ -474,15 +443,15 @@ class PortfolioController {
             case 'experience':
                 return `
                     <div class="cp-preview-box">
-                        <p>Pengalaman profesional dalam web development modern, interactive UI 60 FPS, dan aplikasi mobile skala produksi.</p>
-                        <p>Tekan tombol di bawah untuk melihat timeline perjalanan karir dan pendidikan.</p>
+                        <p>Professional experience in web development, internal desktop applications, and IT support across multiple organizations.</p>
+                        <p>Click below to see the full career and education timeline.</p>
                     </div>
                 `;
             case 'github':
                 return `
                     <div class="cp-preview-box">
-                        <p>Terhubung langsung dengan GitHub API untuk menampilkan proyek open source dan repository publik terkini.</p>
-                        <p>Repositori: <strong>@${this.data.github.username}</strong></p>
+                        <p>Connected to GitHub to display public repositories and open source projects.</p>
+                        <p>Repository: <strong>@${this.data.github.username}</strong></p>
                     </div>
                 `;
             case 'contact':
@@ -490,11 +459,11 @@ class PortfolioController {
                     <div class="cp-preview-box">
                         <h4>LET'S BUILD SOMETHING TOGETHER</h4>
                         <p>Email: <a href="mailto:${this.data.contact.email}" style="color: var(--miku-primary);">${this.data.contact.email}</a></p>
-                        <p>Buka form transmisi di bawah untuk mengirim pesan langsung.</p>
+                        <p>Open the transmission form below to send a direct message.</p>
                     </div>
                 `;
             default:
-                return `<div class="cp-preview-box"><p>Jelajahi dunia digital ini untuk menemukan informasi lebih lanjut.</p></div>`;
+                return `<div class="cp-preview-box"><p>Explore this digital world to discover more information.</p></div>`;
         }
     }
 
@@ -534,12 +503,12 @@ class PortfolioController {
                         <img src="${proj.image}" alt="${proj.title}" class="modal-img">
                     </div>
                     <p class="modal-desc">${proj.description}</p>
-                    <div class="modal-section-title">// TEKNOLOGI YANG DIGUNAKAN</div>
+                    <div class="modal-section-title">// TECHNOLOGIES USED</div>
                     <div class="proj-tech-row">
                         ${proj.tech.map(t => `<span class="tech-pill">${t}</span>`).join('')}
                     </div>
                     ${proj.stats ? `
-                        <div class="modal-section-title" style="margin-top: 18px;">// HIGHLIGHT SPESIFIKASI</div>
+                        <div class="modal-section-title" style="margin-top: 18px;">// SPEC HIGHLIGHTS</div>
                         <div class="modal-stats-grid">
                             ${Object.entries(proj.stats).map(([k, v]) => `
                                 <div class="modal-stat-box">
@@ -550,14 +519,9 @@ class PortfolioController {
                         </div>
                     ` : ''}
                     <div class="modal-actions-row">
-                        ${proj.demo ? `
-                            <a href="${proj.demo}" class="cyber-btn primary">
-                                <span>⚡</span> LIVE DEMO
-                            </a>
-                        ` : ''}
                         ${proj.github ? `
                             <a href="${proj.github}" target="_blank" rel="noopener noreferrer" class="cyber-btn secondary">
-                                <span>⌥</span> REPOSITORI GITHUB
+                                <span>⌥</span> GITHUB REPO
                             </a>
                         ` : ''}
                     </div>
@@ -569,10 +533,31 @@ class PortfolioController {
         });
     }
 
-    // 14. AUDIO CONTROLS
+    // 14. AUDIO CONTROLS — dropdown-based
     setupAudioControls() {
         const audioBtn = document.getElementById('audio-toggle-btn');
         const sfxBtn = document.getElementById('sfx-toggle-btn');
+        const dropdownTrigger = document.getElementById('audio-dropdown-trigger');
+        const dropdownMenu = document.getElementById('audio-dropdown-menu');
+        const dropdownWrap = document.getElementById('audio-dropdown-wrap');
+
+        // Toggle dropdown visibility
+        if (dropdownTrigger && dropdownMenu) {
+            dropdownTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = dropdownMenu.classList.toggle('is-open');
+                dropdownTrigger.classList.toggle('active', isOpen);
+                if (window.cyberAudio) window.cyberAudio.playClick();
+            });
+
+            // Close when clicking outside
+            document.addEventListener('click', (e) => {
+                if (dropdownWrap && !dropdownWrap.contains(e.target)) {
+                    dropdownMenu.classList.remove('is-open');
+                    dropdownTrigger.classList.remove('active');
+                }
+            });
+        }
 
         if (audioBtn) {
             const updateBgmLabel = () => {
@@ -586,7 +571,7 @@ class PortfolioController {
                 updateBgmLabel();
             });
 
-            // Initial check
+            window.addEventListener('cyber:bgm-state', updateBgmLabel);
             updateBgmLabel();
         }
 
@@ -626,15 +611,15 @@ class PortfolioController {
                 const message = document.getElementById('form-message').value.trim();
 
                 if (!name || !email || !message) {
-                    if (feedback) feedback.innerHTML = `<span class="err">Harap lengkapi semua bidang isian.</span>`;
+                    if (feedback) feedback.innerHTML = `<span class="err">Please fill in all fields.</span>`;
                     return;
                 }
 
-                const mailto = `mailto:${this.data.contact.email}?subject=${encodeURIComponent('Pesan Portfolio dari ' + name)}&body=${encodeURIComponent('Nama: ' + name + '\nEmail: ' + email + '\n\nPesan:\n' + message)}`;
+                const mailto = `mailto:${this.data.contact.email}?subject=${encodeURIComponent('Portfolio Message from ' + name)}&body=${encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\nMessage:\n' + message)}`;
                 window.location.href = mailto;
 
                 if (feedback) {
-                    feedback.innerHTML = `<span class="success">✦ Pesan Anda disiapkan di aplikasi email. Terima kasih!</span>`;
+                    feedback.innerHTML = `<span class="success">✦ Your message has been prepared in your email app. Thank you!</span>`;
                 }
 
                 if (window.cyberAudio) window.cyberAudio.playHit();

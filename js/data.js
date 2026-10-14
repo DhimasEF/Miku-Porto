@@ -5,72 +5,67 @@
 
 window.PORTFOLIO_DATA = {
     profile: {
-        name: "Hatsune Developer",
-        displayName: "MIKU / DEV",
-        title: "Fullstack Developer & Creative Technologist",
-        subtitle: "Building thoughtful digital experiences, creative web interfaces, and interactive worlds.",
-        bio: "Saya adalah seorang developer yang berfokus pada web development modern, antarmuka kreatif, dan teknologi interaktif. Senang memadukan estetika visual yang elegan dengan arsitektur kode yang bersih, aksesibel, dan berkinerja tinggi.",
-        shortDescription: "Building things, exploring ideas, and turning imagination into something real.",
-        location: "Jakarta / Remote (Worldwide)",
+        name: "Dhimas Erzal Firmansyah",
+        displayName: "DHIMAS / DEV",
+        title: "Web & Application Developer | UI/UX",
+        subtitle: "Building functional, structured, and enjoyable digital experiences.",
+        bio: "Computer Science graduate experienced in web and desktop application development, REST API integration, database management, and technical support. Interested in building practical applications with a strong focus on usability and UI/UX.",
+        shortDescription: "Building functional, structured & user-friendly web and desktop applications.",
         status: "Open for Opportunities & Collaborations",
         avatar: "assets/miku_chibi_pixel.png",
         cvUrl: "#contact",
         stats: [
-            { value: "5+", label: "YEARS CODING" },
-            { value: "18+", label: "PROJECTS BUILT" },
-            { value: "60 FPS", label: "SMOOTH INTERACTIONS" },
+            { value: "3.82", label: "GPA / 4.00" },
+            { value: "3+", label: "PROJECTS BUILT" },
+            { value: "B.Sc.", label: "COMPUTER SCIENCE" },
             { value: "100%", label: "DEDICATION" }
         ]
     },
 
     skills: [
         {
-            category: "Programming Languages",
+            category: "Web Development",
             icon: "⚡",
-            description: "Bahasa inti untuk pengembangan aplikasi performan & scalable.",
+            description: "Core technologies for modern, responsive web applications.",
             items: [
-                { name: "JavaScript (ESNext)", level: "Advanced", pct: 95 },
-                { name: "TypeScript", level: "Advanced", pct: 90 },
                 { name: "PHP", level: "Proficient", pct: 85 },
-                { name: "Dart", level: "Proficient", pct: 80 },
-                { name: "HTML5 & Modern CSS3", level: "Expert", pct: 98 },
-                { name: "SQL (MySQL / PostgreSQL)", level: "Proficient", pct: 82 }
+                { name: "CodeIgniter", level: "Proficient", pct: 83 },
+                { name: "JavaScript", level: "Proficient", pct: 80 },
+                { name: "Node.js", level: "Intermediate", pct: 72 },
+                { name: "HTML5 & CSS3", level: "Advanced", pct: 90 }
             ]
         },
         {
-            category: "Frameworks & Libraries",
+            category: "Application Development",
             icon: "❖",
-            description: "Teknologi modern untuk web frontend & backend handal.",
+            description: "Cross-platform desktop and mobile application development.",
             items: [
-                { name: "React & Next.js", level: "Advanced", pct: 92 },
-                { name: "Vue.js", level: "Proficient", pct: 82 },
-                { name: "Flutter", level: "Proficient", pct: 80 },
-                { name: "CodeIgniter / Laravel", level: "Proficient", pct: 84 },
-                { name: "Node.js & Express", level: "Advanced", pct: 88 },
-                { name: "Three.js / WebGL", level: "Creative", pct: 85 }
+                { name: "Flutter", level: "Proficient", pct: 78 },
+                { name: "VB.NET", level: "Proficient", pct: 80 },
+                { name: "Windows Forms", level: "Proficient", pct: 80 },
+                { name: "REST API / Web Services", level: "Proficient", pct: 82 }
             ]
         },
         {
-            category: "Creative & Audio Tech",
+            category: "UI/UX Design",
             icon: "♫",
-            description: "Eksplorasi grafis interaktif, audio sintetis & visualisasi.",
+            description: "Designing polished, responsive, and easy-to-use interfaces.",
             items: [
-                { name: "Web Audio API", level: "Advanced", pct: 90 },
-                { name: "Canvas 2D Rendering", level: "Advanced", pct: 92 },
-                { name: "GLSL & Shaders", level: "Intermediate", pct: 75 },
-                { name: "UI/UX & Micro-interactions", level: "Advanced", pct: 94 }
+                { name: "UI Design", level: "Proficient", pct: 80 },
+                { name: "User Experience", level: "Proficient", pct: 78 },
+                { name: "Responsive Interface", level: "Advanced", pct: 85 }
             ]
         },
         {
-            category: "Tools & DevOps",
+            category: "Database & Tools",
             icon: "⚙",
-            description: "Workflow, versioning, deployment, dan otomatisasi.",
+            description: "Database management, development tools, and technical support.",
             items: [
-                { name: "Git & GitHub", level: "Advanced", pct: 92 },
-                { name: "VS Code / IDE Workflows", level: "Expert", pct: 96 },
-                { name: "Docker & Containerization", level: "Intermediate", pct: 78 },
-                { name: "Vite / Webpack", level: "Advanced", pct: 86 },
-                { name: "REST & GraphQL APIs", level: "Advanced", pct: 90 }
+                { name: "MySQL / MariaDB", level: "Proficient", pct: 83 },
+                { name: "Git & GitHub", level: "Proficient", pct: 80 },
+                { name: "Grafana", level: "Intermediate", pct: 70 },
+                { name: "SAP", level: "Intermediate", pct: 65 },
+                { name: "Application Troubleshooting", level: "Proficient", pct: 80 }
             ]
         }
     ],
@@ -78,132 +73,126 @@ window.PORTFOLIO_DATA = {
     projects: [
         {
             id: "proj-1",
-            title: "Project DIVA // Synth Workstation 39",
-            category: "audio",
-            categoryLabel: "Audio Engineering & Web Audio API",
+            title: "Ticketing Management System (TMS)",
+            category: "fullstack",
+            categoryLabel: "Desktop Application & Internal System",
             tag: "Featured",
-            description: "Synthesizer workstation berbasis Web Audio API dengan visualisasi gelombang FFT real-time, polyphonic oscillator, drum sequencer matriks, dan preset soundbank bertema Vocaloid.",
+            description: "An internal VB.NET / Windows Forms application supporting request and assignment workflows at PT Hardo Soloplast. Includes MariaDB/MySQL storage and operational reporting.",
             image: "assets/project_diva.png",
-            tech: ["Web Audio API", "Canvas 2D", "Vanilla ES6", "Glassmorphism"],
+            tech: ["VB.NET", "Windows Forms", "MariaDB", "MySQL"],
             status: "Completed",
-            github: "https://github.com",
-            demo: "#arcade",
+            github: "https://github.com/DhimasEF",
             stats: {
-                "Engine": "Web Audio API",
-                "Polyphony": "16 Voices",
-                "Latency": "< 5ms"
+                "Platform": "Windows Desktop",
+                "Database": "MariaDB / MySQL",
+                "Type": "Internal System"
             }
         },
         {
             id: "proj-2",
-            title: "Cyber Metaverse Protocol 01",
+            title: "Grafana Logistics Dashboard",
             category: "3d",
-            categoryLabel: "3D Graphics & Interactive World",
-            tag: "Interactive 3D",
-            description: "Eksplorasi ruang digital 3D dengan procedural city environment, low-poly voxel geometry, custom shader wireframe, dan ambient spatial audio.",
+            categoryLabel: "Data Visualization & Monitoring",
+            tag: "Dashboard",
+            description: "A Grafana logistics dashboard for monitoring operational data in real time in an industrial environment.",
             image: "assets/project_metaverse.png",
-            tech: ["Three.js", "WebGL", "TypeScript", "Procedural 3D"],
-            status: "Active Prototype",
-            github: "https://github.com",
-            demo: "#world",
+            tech: ["Grafana", "Data Visualization", "SQL", "Monitoring"],
+            status: "Completed",
+            github: "https://github.com/DhimasEF",
             stats: {
-                "Renderer": "Three.js r128",
-                "FPS Target": "60 FPS Smooth",
-                "Lighting": "PBR Soft Glow"
+                "Tool": "Grafana",
+                "Type": "Logistics Dashboard",
+                "Focus": "Real-time Data"
             }
         },
         {
             id: "proj-3",
-            title: "Vocal Matrix // Neural Interface",
+            title: "AMV Community Web",
             category: "fullstack",
-            categoryLabel: "Fullstack & Creative UI Dashboard",
+            categoryLabel: "Web Development & Community Platform",
             tag: "Web Application",
-            description: "Dashboard interaktif modern dengan visualisasi data real-time, arsitektur micro-interactions elegan, serta audio-reactive waveform analytics berkecepatan 60 FPS.",
+            description: "A community website that shares information and supports the needs of an Anime Music Video (AMV) community, built with a modern web development approach.",
             image: "assets/project_neural.png",
-            tech: ["React", "Node.js", "Tailored CSS", "WebSockets"],
+            tech: ["PHP", "JavaScript", "MySQL", "CSS3"],
             status: "Completed",
-            github: "https://github.com",
-            demo: "#",
+            github: "https://github.com/DhimasEF",
             stats: {
-                "Framework": "React & Node",
-                "Interface": "Glassmorphism",
-                "Performance": "Lighthouse 98+"
+                "Platform": "Web",
+                "Type": "Community Site",
+                "Stack": "PHP + JS"
             }
         }
     ],
 
     experience: [
         {
-            period: "2024 — Sekarang",
-            role: "Senior Creative Developer / Fullstack Engineer",
-            organization: "Digital Innovations Lab",
-            location: "Remote",
-            description: "Memimpin perancangan frontend interaktif berbasis Three.js & Canvas, mengoptimalkan pipeline Web Audio, serta mengimplementasikan design system modern yang responsif dan aksesibel."
+            period: "July 2026 — Present",
+            role: "Cashier • Administration • Warehouse Operations",
+            organization: "Toko Jantan",
+            description: "Process customer sales and payments, maintain operational records, monitor and organize inventory, and support receiving, storage, and order preparation."
         },
         {
-            period: "2022 — 2024",
-            role: "Frontend & Web Application Developer",
-            organization: "Studio Cybernetic Media",
-            location: "Jakarta, Indonesia",
-            description: "Mengembangkan aplikasi web performan tinggi menggunakan React, TypeScript, dan PHP. Mengurangi bundle size sebesar 35% dan meningkatkan core web vitals ke skor 95+."
+            period: "2025 — 2026",
+            role: "Staff IT",
+            organization: "PT Hardo Soloplast",
+            description: "Contributed to a VB.NET/Windows Forms Ticketing Management System (TMS). Supported database management, data integration, reporting, application troubleshooting, and technical support using SAP, Flutter/Android, .NET desktop, and local networks."
         },
         {
-            period: "2019 — 2022",
-            role: "Web & Mobile Developer (Junior to Mid)",
-            organization: "Creative Tech House",
-            location: "Bandung, Indonesia",
-            description: "Membangun antarmuka mobile menggunakan Flutter & Dart, serta portal web dengan CodeIgniter dan REST API terstruktur."
+            period: "September 2024 — November 2024",
+            role: "Web Development Intern",
+            organization: "Dinas Tenaga Kerja Kota Semarang",
+            description: "Helped develop a web-based information system for managing events and articles published by the Semarang City Department of Manpower, improving how information was organized and shared."
         }
     ],
 
     education: [
         {
-            period: "2018 — 2022",
-            degree: "Sarjana Ilmu Komputer / Teknik Informatika",
-            institution: "Universitas Teknologi",
-            description: "Fokus studi pada Rekayasa Perangkat Lunak, Grafika Komputer, Interaksi Manusia & Komputer (HCI), dan Algoritma Struktur Data."
+            period: "Graduated 2025",
+            degree: "B.Sc. in Computer Science",
+            institution: "Universitas Kristen Teknologi Surakarta",
+            description: "GPA: 3.82 / 4.00. Focused on software engineering, web and mobile development, and databases, with hands-on experience in academic projects and information systems."
         }
     ],
 
     github: {
-        username: "hatsunemiku-dev",
-        profileUrl: "https://github.com",
+        username: "DhimasEF",
+        profileUrl: "https://github.com/DhimasEF",
         fallbackRepos: [
             {
-                name: "miku-digital-world-portfolio",
-                description: "Interactive Hatsune Miku inspired 3D digital world portfolio built with Three.js and vanilla web standards.",
-                language: "JavaScript",
-                stars: 139,
-                forks: 39,
-                url: "https://github.com",
+                name: "ticketing-management-system",
+                description: "An internal VB.NET/Windows Forms TMS supporting company request and assignment workflows.",
+                language: "VB.NET",
+                stars: 5,
+                forks: 1,
+                url: "https://github.com/DhimasEF",
                 updated: "Recently"
             },
             {
-                name: "vocaloid-webaudio-synth",
-                description: "Real-time polyphonic synthesizer and FFT frequency spectrum analyzer using Web Audio API.",
-                language: "TypeScript",
-                stars: 84,
-                forks: 21,
-                url: "https://github.com",
-                updated: "1 week ago"
+                name: "amv-community-web",
+                description: "A PHP and MySQL community website for sharing information and supporting AMV community services.",
+                language: "PHP",
+                stars: 3,
+                forks: 0,
+                url: "https://github.com/DhimasEF",
+                updated: "2 months ago"
             },
             {
-                name: "threejs-isometric-digital-garden",
-                description: "Lightweight low-poly voxel garden with smooth follow camera, physics bobbing, and custom shaders.",
-                language: "JavaScript",
-                stars: 95,
-                forks: 18,
-                url: "https://github.com",
-                updated: "2 weeks ago"
+                name: "grafana-logistics-dashboard",
+                description: "A Grafana dashboard for real-time logistics and operations monitoring.",
+                language: "SQL",
+                stars: 4,
+                forks: 0,
+                url: "https://github.com/DhimasEF",
+                updated: "3 months ago"
             },
             {
-                name: "flutter-vocal-mobile-suite",
-                description: "Clean architecture mobile application for audio sequencing, built with Flutter & Dart.",
-                language: "Dart",
-                stars: 62,
-                forks: 14,
-                url: "https://github.com",
-                updated: "1 month ago"
+                name: "web-codeigniter-project",
+                description: "A PHP CodeIgniter information system with CRUD, REST API, and database management features.",
+                language: "PHP",
+                stars: 2,
+                forks: 0,
+                url: "https://github.com/DhimasEF",
+                updated: "4 months ago"
             }
         ]
     },
@@ -211,29 +200,22 @@ window.PORTFOLIO_DATA = {
     socials: [
         {
             platform: "GitHub",
-            username: "github.com/hatsunemiku-dev",
-            url: "https://github.com",
+            username: "github.com/DhimasEF",
+            url: "https://github.com/DhimasEF",
             icon: "◈",
             color: "#39E6D0"
         },
         {
-            platform: "LinkedIn",
-            username: "linkedin.com/in/creative-dev",
-            url: "https://linkedin.com",
+            platform: "Instagram",
+            username: "@fly.y4z_4k3",
+            url: "https://instagram.com/fly.y4z_4k3/",
             icon: "✦",
             color: "#5CE1E6"
         },
         {
-            platform: "Discord",
-            username: "MikuCoder#3939",
-            url: "https://discord.com",
-            icon: "⚡",
-            color: "#8FFFF5"
-        },
-        {
             platform: "Email",
-            username: "contact@miku-portfolio.space",
-            url: "mailto:contact@miku-portfolio.space",
+            username: "dhimasfirmansyah016@gmail.com",
+            url: "mailto:dhimasfirmansyah016@gmail.com",
             icon: "✉",
             color: "#39E6D0"
         }
@@ -241,10 +223,9 @@ window.PORTFOLIO_DATA = {
 
     contact: {
         heading: "LET'S BUILD SOMETHING TOGETHER.",
-        subheading: "Tertarik berkolaborasi untuk proyek baru, freelance, atau ingin sekadar berdiskusi seputar ide kreatif? Silakan kirim pesan.",
-        email: "contact@miku-portfolio.space",
-        location: "Jakarta, Indonesia (Available for Remote Worldwide)",
-        socialLink: "https://linkedin.com"
+        subheading: "Interested in collaborating on a project, freelance work, or a creative idea? Send me a message.",
+        email: "dhimasfirmansyah016@gmail.com",
+        socialLink: "https://github.com/DhimasEF"
     },
 
     checkpoints: [
@@ -252,7 +233,7 @@ window.PORTFOLIO_DATA = {
             id: "start",
             name: "START",
             title: "WELCOME ABOARD",
-            subtitle: "Awali penjelajahan dunia digital kecil ini bersama Chibi Miku.",
+            subtitle: "Begin exploring this small digital world with Chibi Miku.",
             icon: "✦",
             color: "#39E6D0",
             x: 0,
@@ -262,7 +243,7 @@ window.PORTFOLIO_DATA = {
             id: "about",
             name: "PROFILE",
             title: "ABOUT ME",
-            subtitle: "Ketahui lebih dekat profil, visi kerja, dan cerita di balik layar.",
+            subtitle: "Learn about my background, approach, and work.",
             icon: "★",
             color: "#5CE1E6",
             x: -8,
@@ -272,7 +253,7 @@ window.PORTFOLIO_DATA = {
             id: "skills",
             name: "SKILLS",
             title: "TECHNICAL CAPABILITIES",
-            subtitle: "Keahlian bahasa pemrograman, framework, dan tools modern.",
+            subtitle: "Programming languages, frameworks, and modern development tools.",
             icon: "⚡",
             color: "#8FFFF5",
             x: -6,
@@ -282,7 +263,7 @@ window.PORTFOLIO_DATA = {
             id: "projects",
             name: "PROJECTS",
             title: "FEATURED WORK",
-            subtitle: "Karya digital, WebGL 3D, dan aplikasi audio mutakhir.",
+            subtitle: "Featured digital projects, 3D WebGL, and interactive applications.",
             icon: "❖",
             color: "#39E6D0",
             x: 0,
@@ -292,7 +273,7 @@ window.PORTFOLIO_DATA = {
             id: "experience",
             name: "EXPERIENCE",
             title: "JOURNEY & TIMELINE",
-            subtitle: "Jejak langkah profesional dan latar belakang akademis.",
+            subtitle: "Professional experience and academic background.",
             icon: "◈",
             color: "#5CE1E6",
             x: 6,
@@ -302,7 +283,7 @@ window.PORTFOLIO_DATA = {
             id: "github",
             name: "GITHUB",
             title: "OPEN SOURCE & REPOSITORIES",
-            subtitle: "Eksplorasi kode sumber dan kontribusi proyek terbuka.",
+            subtitle: "Explore source code and open-source contributions.",
             icon: "⌥",
             color: "#8FFFF5",
             x: 8,
@@ -312,7 +293,7 @@ window.PORTFOLIO_DATA = {
             id: "contact",
             name: "CONTACT",
             title: "GET IN TOUCH",
-            subtitle: "Buka saluran komunikasi untuk kolaborasi & diskusi proyek.",
+            subtitle: "Get in touch to discuss a project or collaboration.",
             icon: "✉",
             color: "#39E6D0",
             x: 3,

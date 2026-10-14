@@ -1,7 +1,7 @@
 /**
  * ATMOSPHERIC CYBER PARTICLE BACKGROUND
  * Preserved from original codebase and enhanced for smooth, lightweight ambient depth.
- * Subtle Hatsune Miku turquoise glow (#39E6D0, #5CE1E6, #8FFFF5).
+ * A restrained teal, violet, pink, and blue palette with a sparse constellation mesh.
  */
 
 class CyberBackground {
@@ -11,15 +11,21 @@ class CyberBackground {
         this.ctx = this.canvas.getContext('2d');
         this.particles = [];
         this.notes = [];
+        this.isPaused = false;
+        this.arcadePaused = false;
+        this.animationFrameId = null;
         this.mouse = { x: -1000, y: -1000, parallaxX: 0, parallaxY: 0 };
         this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         this.frame = 0;
         this.themeColors = {
             primary: '#39E6D0',
             secondary: '#5CE1E6',
-            accent: '#8FFFF5',
-            line: 'rgba(57, 230, 208, 0.08)'
+            accent: '#9B82FF',
+            pink: '#F47AB8',
+            blue: '#77B9FF',
+            line: 'rgba(119, 185, 255, 0.08)'
         };
+        this.particlePalette = [this.themeColors.primary, this.themeColors.secondary, this.themeColors.accent, this.themeColors.pink, this.themeColors.blue];
 
         this.init();
     }
@@ -51,7 +57,11 @@ class CyberBackground {
         });
 
         document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) this.animate();
+            if (document.hidden) this.pauseAnimation();
+            else if (!this.arcadePaused && this.isPaused) {
+                this.isPaused = false;
+                this.animate();
+            }
         });
 
         // Listen for reduced motion changes
@@ -76,17 +86,17 @@ class CyberBackground {
 
     createParticles() {
         // Optimal lightweight count: not overcrowded, soft atmospheric depth
-        const count = Math.min(Math.floor((this.width * this.height) / 32000), 38);
+        const count = Math.min(Math.floor((this.width * this.height) / 24000), 54);
         this.particles = [];
         for (let i = 0; i < count; i++) {
             this.particles.push({
                 x: Math.random() * this.width,
                 y: Math.random() * this.height,
-                vx: (Math.random() - 0.5) * 0.18,
-                vy: (Math.random() - 0.5) * 0.18,
-                radius: Math.random() * 1.4 + 0.6,
-                color: Math.random() > 0.3 ? this.themeColors.primary : this.themeColors.accent,
-                alpha: Math.random() * 0.22 + 0.08,
+                vx: (Math.random() - 0.5) * 0.2,
+                vy: (Math.random() - 0.5) * 0.2,
+                radius: Math.random() * 1.8 + 0.9,
+                color: Math.random() < 0.58 ? this.themeColors.primary : this.particlePalette[Math.floor(Math.random() * this.particlePalette.length)],
+                alpha: Math.random() * 0.2 + 0.1,
                 pulseSpeed: Math.random() * 0.02 + 0.008,
                 pulse: Math.random() * Math.PI
             });
@@ -95,7 +105,7 @@ class CyberBackground {
         // Floating subtle cyber musical glyphs (♪, ♫, 01, 39, ✦)
         const noteSymbols = ['♪', '♫', '01', '39', '✦', '✧'];
         this.notes = [];
-        const noteCount = Math.min(Math.floor(this.width / 320), 5);
+        const noteCount = Math.min(Math.floor(this.width / 270), 7);
         for (let i = 0; i < noteCount; i++) {
             this.notes.push({
                 symbol: noteSymbols[Math.floor(Math.random() * noteSymbols.length)],
@@ -105,6 +115,7 @@ class CyberBackground {
                 vx: (Math.random() - 0.5) * 0.1,
                 size: Math.random() * 4 + 9,
                 alpha: Math.random() * 0.18 + 0.07,
+                color: this.particlePalette[Math.floor(Math.random() * this.particlePalette.length)],
                 rotation: Math.random() * Math.PI * 2,
                 rotSpeed: (Math.random() - 0.5) * 0.015
             });
@@ -121,7 +132,7 @@ class CyberBackground {
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
                 radius: Math.random() * 2 + 1,
-                color: this.themeColors.accent,
+                color: this.particlePalette[Math.floor(Math.random() * this.particlePalette.length)],
                 alpha: 0.8,
                 isBurst: true,
                 life: 1
@@ -130,11 +141,37 @@ class CyberBackground {
     }
 
     animate() {
-        if (document.hidden) return;
-        requestAnimationFrame(() => this.animate());
+        if (document.hidden || this.isPaused) return;
+        this.animationFrameId = requestAnimationFrame(() => {
+            this.animationFrameId = null;
+            this.animate();
+        });
         this.frame++;
 
         this.ctx.clearRect(0, 0, this.width, this.height);
+
+        // A sparse constellation mesh adds depth without turning the background into a grid.
+        this.ctx.save();
+        this.ctx.lineWidth = 0.7;
+        for (let i = 0; i < this.particles.length; i++) {
+            const a = this.particles[i];
+            if (a.isBurst) continue;
+            for (let j = i + 1; j < this.particles.length; j++) {
+                const b = this.particles[j];
+                if (b.isBurst) continue;
+                const dx = a.x - b.x;
+                const dy = a.y - b.y;
+                const distance = Math.hypot(dx, dy);
+                if (distance > 138) continue;
+                this.ctx.beginPath();
+                this.ctx.moveTo(a.x, a.y);
+                this.ctx.lineTo(b.x, b.y);
+                this.ctx.strokeStyle = a.color;
+                this.ctx.globalAlpha = (1 - distance / 138) * 0.12;
+                this.ctx.stroke();
+            }
+        }
+        this.ctx.restore();
 
         // Render ambient floating particles
         for (let i = this.particles.length - 1; i >= 0; i--) {
@@ -171,7 +208,7 @@ class CyberBackground {
                 this.ctx.arc(renderX, renderY, p.radius, 0, Math.PI * 2);
                 this.ctx.fillStyle = p.color;
                 this.ctx.globalAlpha = dynamicAlpha;
-                this.ctx.shadowBlur = 6;
+                this.ctx.shadowBlur = 9 + p.radius * 2;
                 this.ctx.shadowColor = p.color;
                 this.ctx.fill();
                 this.ctx.shadowBlur = 0;
@@ -199,12 +236,36 @@ class CyberBackground {
                 this.ctx.translate(renderX, renderY);
                 this.ctx.rotate(n.rotation);
                 this.ctx.font = `500 ${n.size}px 'Space Grotesk', monospace`;
-                this.ctx.fillStyle = this.themeColors.primary;
+                this.ctx.fillStyle = n.color;
                 this.ctx.globalAlpha = n.alpha;
                 this.ctx.fillText(n.symbol, -n.size / 2, n.size / 2);
                 this.ctx.restore();
             }
             this.ctx.restore();
+        }
+    }
+
+    pauseForArcade() {
+        this.arcadePaused = true;
+        this.isPaused = true;
+        if (this.animationFrameId !== null) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+        }
+    }
+
+    resumeAfterArcade() {
+        this.arcadePaused = false;
+        if (document.hidden) return;
+        this.isPaused = false;
+        this.animate();
+    }
+
+    pauseAnimation() {
+        this.isPaused = true;
+        if (this.animationFrameId !== null) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
         }
     }
 }

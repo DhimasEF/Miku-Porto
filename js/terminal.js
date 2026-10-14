@@ -110,16 +110,16 @@ class CyberTerminal {
             case 'help':
                 this.print(`
 <span class="highlight">==== AVAILABLE VOCALOID SYSTEM COMMANDS ====</span>
-  <span class="cmd-name">help</span>        : Tampilkan daftar perintah
-  <span class="cmd-name">whoami</span>      : Informasi profil & role developer
-  <span class="cmd-name">skills</span>      : Ringkasan keahlian teknis
-  <span class="cmd-name">projects</span>    : Daftar proyek unggulan
+  <span class="cmd-name">help</span>        : Show available commands
+  <span class="cmd-name">whoami</span>      : Developer profile and role
+  <span class="cmd-name">skills</span>      : Technical skills overview
+  <span class="cmd-name">projects</span>    : Featured projects
   <span class="cmd-name">miku</span>        : Sapaan Chibi Hatsune Miku 39
-  <span class="cmd-name">world</span>       : Kunjungi 3D Interactive World
-  <span class="cmd-name">arcade</span>      : Buka mini-game Diva Beat Arcade
-  <span class="cmd-name">contact</span>     : Buka informasi saluran kontak
-  <span class="cmd-name">clear</span>       : Bersihkan layar terminal
-  <span class="cmd-name">exit</span>        : Tutup terminal
+  <span class="cmd-name">world</span>       : Visit the 3D interactive world
+  <span class="cmd-name">arcade</span>      : Open the Diva Beat Arcade
+  <span class="cmd-name">contact</span>     : View contact channels
+  <span class="cmd-name">clear</span>       : Clear the terminal
+  <span class="cmd-name">exit</span>        : Close the terminal
 `);
                 break;
 
@@ -129,7 +129,6 @@ class CyberTerminal {
 <span class="highlight">[PROFILE IDENTITY]</span>
   NAME     : ${p.name || 'Hatsune Developer'}
   ROLE     : ${p.title || 'Fullstack & Creative Developer'}
-  LOCATION : ${p.location || 'Worldwide'}
   STATUS   : ${p.status || 'Active'}
 `);
                 break;
@@ -182,7 +181,6 @@ class CyberTerminal {
                 this.print(`
 <span class="highlight">[COMMUNICATION FREQUENCY]</span>
   EMAIL    : ${c.email || 'contact@miku-portfolio.space'}
-  LOCATION : ${c.location || 'Remote'}
 `);
                 break;
 
@@ -195,7 +193,7 @@ class CyberTerminal {
                 break;
 
             default:
-                this.print(`<span class="error" style="color: #ff99aa;">Perintah '${this.escapeHTML(cmd)}' tidak dikenali. Ketik '<span class="cmd-name">help</span>' untuk bantuan.</span>`);
+                this.print(`<span class="error" style="color: #ff99aa;">Command '${this.escapeHTML(cmd)}' not recognized. Type '<span class="cmd-name">help</span>' for assistance.</span>`);
                 break;
         }
     }

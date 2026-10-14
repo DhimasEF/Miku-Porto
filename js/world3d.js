@@ -44,6 +44,8 @@ class DigitalWorld3D {
         this.clock = new THREE.Clock();
         this.animTime = 0;
         this.isPaused = false;
+        this.arcadePaused = false;
+        this.animationFrameId = null;
         this.raycaster = new THREE.Raycaster();
         this.mouseVec = new THREE.Vector2();
 
@@ -59,13 +61,14 @@ class DigitalWorld3D {
         this.setupTerrain();
         this.setupCheckpoints();
         this.setupChibiMiku();
+        this.setupAvatarSkins();
         this.setupParticles();
         this.setupControls();
         this.setupEventListeners();
         this.setupHUD();
 
         this.animate = this.animate.bind(this);
-        requestAnimationFrame(this.animate);
+        this.animationFrameId = requestAnimationFrame(this.animate);
     }
 
     setupRenderer() {
@@ -514,6 +517,39 @@ class DigitalWorld3D {
 
         this.miku.add(headGroup);
 
+        const makeAccessory = (kind, color) => {
+            const group = new THREE.Group();
+            const material = new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.18, roughness: 0.35, metalness: 0.25 });
+            if (kind === 'visor') {
+                const visor = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.1, 0.36), material);
+                visor.position.set(0, 0.32, 0.3);
+                group.add(visor);
+            } else if (kind === 'crown') {
+                const band = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.035, 6, 16), material);
+                band.position.y = 0.34;
+                group.add(band);
+                [-0.2, 0, 0.2].forEach((x, index) => {
+                    const point = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.2 + (index === 1 ? 0.08 : 0), 5), material);
+                    point.position.set(x, 0.49, 0);
+                    group.add(point);
+                });
+            } else if (kind === 'halo') {
+                const halo = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.025, 6, 24), material);
+                halo.position.set(0, 0.54, -0.24);
+                halo.rotation.x = Math.PI / 2.8;
+                group.add(halo);
+            }
+            group.visible = false;
+            headGroup.add(group);
+            return group;
+        };
+        const skinAccessories = {
+            stage: makeAccessory('crown', 0xf5e050),
+            street: makeAccessory('visor', 0x263d4a),
+            wonderland: makeAccessory('crown', 0xff75bb),
+            empty: makeAccessory('halo', 0x8a7bff)
+        };
+
         // 4. Arms & Detached Black Sleeves with Teal Highlights
         const makeArm = (isLeft) => {
             const armPivot = new THREE.Group();
@@ -605,7 +641,52 @@ class DigitalWorld3D {
             torso
         };
 
+        this.miku.userData.skinMaterials = {
+            hair: mikuTealMat,
+            outfit: lightGrayMat,
+            dark: darkGrayMat,
+            accent: pinkRibbonMat,
+            tie: mikuTealMat
+        };
+        this.miku.userData.skinAccessories = skinAccessories;
+
         this.scene.add(this.miku);
+    }
+
+    setupAvatarSkins() {
+        this.avatarSkins = {
+            original: { hair: 0x39e6d0, outfit: 0xd1d5db, dark: 0x1f2937, accent: 0xff2a85 },
+            stage: { hair: 0x39e6d0, outfit: 0xf3a8d0, dark: 0x3a3150, accent: 0xf5e050 },
+            street: { hair: 0x39e6d0, outfit: 0x263d4a, dark: 0x101820, accent: 0x39e6d0 },
+            wonderland: { hair: 0xb59cff, outfit: 0xffe6a6, dark: 0x514477, accent: 0xff75bb },
+            empty: { hair: 0xa9c5d8, outfit: 0x3a4e69, dark: 0x182638, accent: 0x8a7bff }
+        };
+        const applySkin = (skinName) => {
+            const palette = this.avatarSkins[skinName];
+            if (!palette || !this.miku) return;
+            const materials = this.miku.userData.skinMaterials;
+            materials.hair.color.setHex(palette.hair);
+            materials.tie.color.setHex(palette.hair);
+            materials.outfit.color.setHex(palette.outfit);
+            materials.dark.color.setHex(palette.dark);
+            materials.accent.color.setHex(palette.accent);
+            materials.hair.emissive?.setHex(palette.hair);
+            materials.hair.emissiveIntensity = skinName === 'original' || skinName === 'street' ? 0.25 : 0.16;
+            Object.entries(this.miku.userData.skinAccessories).forEach(([name, accessory]) => {
+                accessory.visible = name === skinName;
+            });
+            localStorage.setItem('miku_avatar_skin', skinName);
+            document.querySelectorAll('.avatar-skin-btn').forEach(button => {
+                const selected = button.dataset.skin === skinName;
+                button.classList.toggle('active', selected);
+                button.setAttribute('aria-pressed', String(selected));
+            });
+        };
+
+        document.querySelectorAll('.avatar-skin-btn').forEach(button => {
+            button.addEventListener('click', () => applySkin(button.dataset.skin));
+        });
+        applySkin(localStorage.getItem('miku_avatar_skin') || 'original');
     }
 
     setupParticles() {
@@ -675,6 +756,7 @@ class DigitalWorld3D {
 
         // Click / Tap on the Island to Move Miku
         this.container.addEventListener('pointerdown', (e) => {
+            if (e.target.closest('.avatar-skin-btn')) return;
             const rect = this.renderer.domElement.getBoundingClientRect();
             this.mouseVec.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
             this.mouseVec.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -737,9 +819,33 @@ class DigitalWorld3D {
 
         // Check visibility to pause when tab inactive
         document.addEventListener('visibilitychange', () => {
-            this.isPaused = document.hidden;
-            if (!this.isPaused) this.clock.getDelta(); // reset delta
+            if (document.hidden) this.pauseAnimation();
+            else if (!this.arcadePaused) this.resumeAnimation();
         });
+    }
+
+    pauseForArcade() {
+        this.arcadePaused = true;
+        this.pauseAnimation();
+    }
+
+    resumeAfterArcade() {
+        this.arcadePaused = false;
+        if (!document.hidden) this.resumeAnimation();
+    }
+
+    pauseAnimation() {
+        this.isPaused = true;
+        if (this.animationFrameId !== null) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+        }
+    }
+
+    resumeAnimation() {
+        this.isPaused = false;
+        this.clock.getDelta(); // reset the delta so paused time is not applied
+        if (this.animationFrameId === null) this.animationFrameId = requestAnimationFrame(this.animate);
     }
 
     setupHUD() {
@@ -996,7 +1102,7 @@ class DigitalWorld3D {
 
     animate() {
         if (this.isPaused) {
-            requestAnimationFrame(this.animate);
+            this.animationFrameId = null;
             return;
         }
 
@@ -1039,7 +1145,7 @@ class DigitalWorld3D {
         }
 
         this.renderer.render(this.scene, this.camera);
-        requestAnimationFrame(this.animate);
+        this.animationFrameId = requestAnimationFrame(this.animate);
     }
 }
 
